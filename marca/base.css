@@ -1,0 +1,402 @@
+/* ==========================================================================
+   KIT BASE GJVcorp — tokens y componentes mínimos
+   Estándar GJVcorp v1.1 · §7.2
+   --------------------------------------------------------------------------
+   CÓMO SE USA
+   1. Este archivo vive en `marca/base.css`.
+   2. Se enlaza en el <head>, ANTES de styles.css propio:
+        <link rel="stylesheet" href="marca/base.css">
+        <link rel="stylesheet" href="styles.css">
+   3. El kit de producto NO redefine estos tokens: solo añade su acento.
+   4. PROHIBIDO escribir colores literales fuera de este archivo
+      (única excepción: @media print, y el gradiente del isotipo de marca).
+
+   ACENTO DE ESTE PRODUCTO
+   creaCERTIFICACION es una herramienta de DataRecupera (Recuperación
+   Tributaria). Su acento es el verde de marca del ecosistema.
+   Ver `00 DOCUMENTACION/00 GUIA VISUAL creaCERTIFICACION.md`.
+   ========================================================================== */
+
+/* ------------------------------------------------------- 0. TIPOGRAFÍA ---
+   Inter se CARGA desde `marca/fuentes/`. Declararla sin cargarla no es
+   inocuo: el navegador cae a la fuente del sistema, mide el texto con unas
+   métricas y la exportación a PDF lo dibuja con otras. El resultado es que
+   los espacios desaparecen y el PDF sale con las palabras pegadas.
+
+   §7.8.5 exige fuentes embebidas en los informes PDF. Estos `@font-face` son
+   lo que permite embebirlas de verdad. */
+@font-face {
+  font-family: "Inter";
+  src: url("fuentes/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fuentes/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fuentes/Inter-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fuentes/Inter-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------- 1. TOKENS */
+:root {
+  /* Neutros y semántica */
+  --gjv-navy:          #0F172A;
+  --gjv-texto-2:       #64748B;
+  --gjv-texto-3:       #94A3B8;
+  --gjv-borde:         #E2E8F0;
+  --gjv-borde-fuerte:  #CBD5E1;
+  --gjv-fondo:         #F8FAFC;
+  --gjv-superficie:    #FFFFFF;
+  --gjv-banda:         #F1F5F9;
+
+  --gjv-exito:         #16A34A;
+  --gjv-alerta:        #F59E0B;
+  --gjv-peligro:       #DC2626;
+  --gjv-info:          #2563EB;
+
+  /* Acento del producto: verde DataRecupera.
+     OJO: #16A34A NO alcanza 4,5:1 sobre blanco como texto (3,1:1).
+     Se usa como FONDO de botón primario o filete; como texto va
+     --gjv-acento-oscuro (4,6:1). Ver la guía visual, §3. */
+  --gjv-acento:        #16A34A;
+  --gjv-acento-oscuro: #15803D;
+  --gjv-acento-tenue:  #F0FDF4;
+  --gjv-acento-borde:  #BBF7D0;
+
+  /* Aviso (ámbar): fondo, borde y texto legible sobre ese fondo */
+  --gjv-aviso-fondo:   #FFFBEB;
+  --gjv-aviso-borde:   #FDE68A;
+  --gjv-aviso-texto:   #92400E;
+
+  /* Velo de los modales */
+  --gjv-velo:          rgba(15, 23, 42, .7);
+
+  /* Teal del producto: identifica la comunicación del SRI */
+  --gjv-teal:          #0D9488;
+  --gjv-teal-oscuro:   #0F766E;
+  --gjv-teal-tenue:    #ECFDF5;
+  --gjv-teal-borde:    #99F6E4;
+
+  /* Tipografía */
+  --gjv-fuente:      "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --gjv-fuente-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+
+  /* Escala tipográfica — no inventar pasos intermedios */
+  --gjv-t-11: 11px;
+  --gjv-t-12: 12px;
+  --gjv-t-14: 14px;
+  --gjv-t-16: 16px;
+  --gjv-t-20: 20px;
+  --gjv-t-28: 28px;
+  --gjv-t-36: 36px;
+
+  /* Espaciado — base 4px, solo estos pasos */
+  --gjv-e-1:  4px;
+  --gjv-e-2:  8px;
+  --gjv-e-3: 12px;
+  --gjv-e-4: 16px;
+  --gjv-e-5: 24px;
+  --gjv-e-6: 32px;
+  --gjv-e-7: 48px;
+  --gjv-e-8: 64px;
+
+  /* Forma y profundidad */
+  --gjv-r-sm: 8px;
+  --gjv-r-md: 12px;
+  --gjv-r-lg: 16px;
+  --gjv-sombra-sm: 0 1px 2px rgba(15, 23, 42, .05);
+  --gjv-sombra-md: 0 8px 24px rgba(15, 23, 42, .08);
+
+  /* Controles */
+  --gjv-alto-control: 32px;
+  --gjv-foco: 0 0 0 3px rgba(22, 163, 74, .35);
+  --gjv-transicion: 140ms ease;
+}
+
+/* --------------------------------------------------------------- 2. BASE */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--gjv-fuente);
+  font-size: var(--gjv-t-14);
+  line-height: 1.5;
+  color: var(--gjv-navy);
+  background: var(--gjv-fondo);
+}
+
+/* Foco visible en TODO lo interactivo: requisito de accesibilidad (§9.7) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: var(--gjv-foco);
+  border-radius: var(--gjv-r-sm);
+}
+
+h1 { font-size: var(--gjv-t-28); font-weight: 700; margin: 0 0 var(--gjv-e-3); }
+h2 { font-size: var(--gjv-t-20); font-weight: 600; margin: 0 0 var(--gjv-e-3); }
+h3 { font-size: var(--gjv-t-16); font-weight: 600; margin: 0 0 var(--gjv-e-2); }
+p  { margin: 0 0 var(--gjv-e-3); }
+
+code, pre, .mono { font-family: var(--gjv-fuente-mono); font-size: var(--gjv-t-12); }
+
+/* --------------------------------------------------- 3. LAYOUT Y CONTENEDOR */
+.gjv-contenedor {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--gjv-e-4);
+}
+
+/* Barra de marca: navy, sobria. SIN gradientes (§12.3) */
+.gjv-cabecera {
+  background: var(--gjv-navy);
+  color: var(--gjv-superficie);
+  padding: var(--gjv-e-3) var(--gjv-e-4);
+  display: flex;
+  align-items: center;
+  gap: var(--gjv-e-4);
+}
+.gjv-cabecera__logo { height: 40px; width: auto; }
+.gjv-cabecera__texto { margin-left: auto; text-align: right; }
+.gjv-cabecera__titulo { font-size: var(--gjv-t-14); font-weight: 600; }
+/* Sobre navy, el texto de acento debe superar 4,5:1 (§9.3.3) */
+.gjv-cabecera__lema { font-size: var(--gjv-t-11); color: #7DD3FC; }
+
+/* Rótulo de sección: mayúsculas cortas con tracking, con filete */
+.gjv-seccion {
+  display: flex;
+  align-items: center;
+  gap: var(--gjv-e-2);
+  margin: var(--gjv-e-4) 0 var(--gjv-e-2);
+}
+.gjv-seccion__titulo {
+  font-size: var(--gjv-t-11);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gjv-navy);
+}
+.gjv-seccion__filete { flex: 1; height: 1px; background: var(--gjv-acento); }
+
+/* --------------------------------------------------------- 4. COMPONENTES */
+.gjv-tarjeta {
+  background: var(--gjv-superficie);
+  border: 1px solid var(--gjv-borde);
+  border-radius: var(--gjv-r-md);
+  box-shadow: var(--gjv-sombra-sm);
+  padding: var(--gjv-e-4);
+}
+
+/* Ficha de métrica */
+.gjv-chip {
+  background: var(--gjv-superficie);
+  border: 1px solid var(--gjv-borde);
+  border-radius: var(--gjv-r-sm);
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  display: inline-flex;
+  flex-direction: column;
+}
+.gjv-chip__rotulo {
+  font-size: var(--gjv-t-11);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--gjv-texto-2);
+}
+.gjv-chip__valor { font-size: var(--gjv-t-16); font-weight: 700; color: var(--gjv-navy); }
+
+.gjv-muted { color: var(--gjv-texto-2); font-size: var(--gjv-t-12); }
+
+/* ------------------------------------------------------------ 5. BOTONES */
+.gjv-btn {
+  min-height: var(--gjv-alto-control);
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  font-family: inherit;
+  font-size: var(--gjv-t-14);
+  color: var(--gjv-navy);
+  background: var(--gjv-superficie);
+  border: 1px solid var(--gjv-borde-fuerte);
+  border-radius: var(--gjv-r-sm);
+  cursor: pointer;
+  transition: border-color var(--gjv-transicion), background var(--gjv-transicion),
+              color var(--gjv-transicion);
+}
+.gjv-btn:hover:not(:disabled) { border-color: var(--gjv-acento); color: var(--gjv-acento-oscuro); }
+.gjv-btn:disabled {
+  color: var(--gjv-texto-3);
+  border-color: var(--gjv-borde);
+  background: var(--gjv-fondo);
+  cursor: default;
+}
+
+/* UN solo botón primario por pantalla (§9.6.3) */
+.gjv-btn--primario {
+  background: var(--gjv-acento);
+  border-color: var(--gjv-acento);
+  color: #fff;
+  font-weight: 600;
+}
+.gjv-btn--primario:hover:not(:disabled) {
+  background: var(--gjv-acento-oscuro);
+  border-color: var(--gjv-acento-oscuro);
+  color: #fff;
+}
+
+/* Estado "ocupado": toda acción que tarde más de 300 ms lo necesita (§9.5) */
+.gjv-btn.is-busy { cursor: progress; opacity: .85; }
+.gjv-btn.is-busy::after {
+  content: "";
+  display: inline-block;
+  width: 12px; height: 12px;
+  margin-left: var(--gjv-e-2);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: gjv-giro .7s linear infinite;
+  vertical-align: -2px;
+}
+@keyframes gjv-giro { to { transform: rotate(360deg); } }
+
+/* ------------------------------------------------- 6. CAMPOS Y FORMULARIOS */
+.gjv-campo { display: flex; flex-direction: column; gap: var(--gjv-e-1); margin-bottom: var(--gjv-e-3); }
+.gjv-campo__etiqueta { font-size: var(--gjv-t-12); font-weight: 600; color: var(--gjv-navy); }
+.gjv-campo__ayuda { font-size: var(--gjv-t-11); color: var(--gjv-texto-2); }
+
+.gjv-input {
+  min-height: var(--gjv-alto-control);
+  width: 100%;
+  padding: var(--gjv-e-2);
+  font-family: inherit;
+  font-size: var(--gjv-t-14);
+  color: var(--gjv-navy);
+  background: var(--gjv-superficie);
+  border: 1px solid var(--gjv-borde-fuerte);
+  border-radius: var(--gjv-r-sm);
+}
+.gjv-input:focus { border-color: var(--gjv-acento); }
+.gjv-input:disabled { background: var(--gjv-fondo); color: var(--gjv-texto-3); }
+/* Error junto al campo, no solo en color (§9.7) */
+.gjv-input[aria-invalid="true"] { border-color: var(--gjv-peligro); }
+.gjv-campo__error { font-size: var(--gjv-t-11); color: var(--gjv-peligro); font-weight: 600; }
+
+/* ---------------------------------------------------------- 7. AVISOS */
+.gjv-aviso {
+  border-radius: var(--gjv-r-sm);
+  border: 1px solid var(--gjv-borde);
+  border-left: 3px solid var(--gjv-info);
+  background: var(--gjv-superficie);
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  font-size: var(--gjv-t-12);
+}
+.gjv-aviso--exito   { border-left-color: var(--gjv-exito); }
+.gjv-aviso--alerta  { border-left-color: var(--gjv-alerta); }
+.gjv-aviso--peligro { border-left-color: var(--gjv-peligro); }
+/* El texto siempre dice QUÉ falló y QUÉ hacer, no solo el color (§9.6.4) */
+
+/* ------------------------------------------------------------ 8. TABLAS */
+.gjv-tabla-envoltura { width: 100%; overflow-x: auto; }
+
+.gjv-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--gjv-superficie);
+  border: 1px solid var(--gjv-borde);
+  border-radius: var(--gjv-r-md);
+  font-size: var(--gjv-t-12);
+}
+.gjv-tabla th {
+  background: var(--gjv-banda);
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-11);
+  font-weight: 600;
+  text-align: left;
+  padding: var(--gjv-e-2);
+  border-bottom: 1px solid var(--gjv-borde);
+  white-space: nowrap;
+}
+.gjv-tabla td {
+  padding: var(--gjv-e-2);
+  border-bottom: 1px solid var(--gjv-borde);
+  vertical-align: top;
+}
+.gjv-tabla tbody tr:hover { background: var(--gjv-fondo); }
+.gjv-tabla tbody tr:last-child td { border-bottom: 0; }
+
+/* Estado vacío: toda tabla y lista lo necesita (§9.5) */
+.gjv-vacio {
+  padding: var(--gjv-e-5);
+  text-align: center;
+  color: var(--gjv-texto-2);
+  font-size: var(--gjv-t-12);
+  background: var(--gjv-superficie);
+  border: 1px dashed var(--gjv-borde-fuerte);
+  border-radius: var(--gjv-r-md);
+}
+
+/* --------------------------------------------------------- 9. CONSOLA */
+.gjv-consola {
+  background: var(--gjv-navy);
+  color: var(--gjv-borde);
+  font-family: var(--gjv-fuente-mono);
+  font-size: var(--gjv-t-12);
+  padding: var(--gjv-e-3);
+  border-radius: 0 0 var(--gjv-r-md) var(--gjv-r-md);
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+.gjv-consola__franja {
+  background: var(--gjv-acento-oscuro);
+  color: #fff;
+  font-size: var(--gjv-t-11);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  border-radius: var(--gjv-r-md) var(--gjv-r-md) 0 0;
+}
+
+/* ---------------------------------------------------------- 10. PIE */
+.gjv-pie {
+  display: flex;
+  gap: var(--gjv-e-3);
+  align-items: center;
+  padding: var(--gjv-e-3) var(--gjv-e-4);
+  font-size: var(--gjv-t-11);
+  color: var(--gjv-texto-2);
+  border-top: 1px solid var(--gjv-borde);
+}
+.gjv-pie__ruta { margin-left: auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* --------------------------------------------------------- 11. IMPRESIÓN
+   Única sección donde se admite color literal (no se heredan variables
+   en todos los motores de impresión). */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: Letter portrait; margin: 12mm 10mm; }
+  tr, thead, tfoot { break-inside: avoid; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  /* PROHIBIDO que un bloque de firma se parta entre páginas */
+  .print-keep { break-inside: avoid; page-break-inside: avoid; }
+}

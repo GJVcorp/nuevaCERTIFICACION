@@ -1,0 +1,1134 @@
+/* ==========================================================================
+   creaCERTIFICACION — Hoja de estilos del producto
+   Estándar GJVcorp v1.1 · §7.2 a §7.8
+   --------------------------------------------------------------------------
+   REGLA: aquí NO se escribe ningún color literal. Todo sale de los tokens de
+   `marca/base.css`. La única excepción admitida es `@media print`, porque los
+   motores de impresión no heredan variables de forma fiable.
+
+   Los tamaños de fuente y los espaciados pertenecen a la escala del kit base.
+   ========================================================================== */
+
+/* ------------------------------------------------------------ 1. BASE ---- */
+
+/* Compatibilidad de ocultación.
+   El HTML marca los bloques ocultos con el atributo `hidden` (semántico y
+   accesible), pero el JavaScript heredado los muestra y los oculta escribiendo
+   `style.display`. Sin esta regla, un `style.display = "block"` ganaría al
+   `display: none` que el navegador aplica a `[hidden]` y el bloque aparecería
+   cuando no toca. Con `!important` el atributo manda siempre, así que ambos
+   mecanismos conviven sin tocar el JS. */
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: var(--gjv-fuente);
+    font-size: var(--gjv-t-14);
+    color: var(--gjv-navy);
+    background-color: var(--gjv-fondo);
+    margin: 0;
+    padding: 0;
+}
+
+/* -------------------------------------------------- 2. LAYOUT PRINCIPAL -- */
+
+/* Apila los dos paneles en pantallas estrechas.
+   OJO: la regla anterior usaba `#layout-principal`, un id que NO existe en el
+   HTML. Era una regla muerta: nunca se aplicó. */
+.cards-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--gjv-e-5);
+    width: 100%;
+    margin: 0 auto var(--gjv-e-5) auto;
+    box-sizing: border-box;
+}
+
+#area-proceso,
+#area-clientes {
+    flex: 1 1 0;
+    width: 48%;
+    min-width: 340px;
+    box-sizing: border-box;
+    align-self: flex-start;
+    background-color: var(--gjv-superficie);
+    padding: var(--gjv-e-4);
+    margin: var(--gjv-e-3);
+    border-radius: var(--gjv-r-lg);
+    box-shadow: var(--gjv-sombra-sm);
+}
+
+@media (max-width: 900px) {
+    .cards-container {
+        flex-direction: column;
+        gap: 0;
+    }
+    #area-proceso,
+    #area-clientes {
+        width: 100%;
+        min-width: unset;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.columns-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.column1,
+.column2 {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.column1 h3,
+.column2 h3 {
+    margin-top: 0;
+}
+
+/* ---------------------------------------------------------- 3. CABECERA -- */
+
+/* Barra de marca: navy sobria, SIN gradiente y SIN altura fija (§7.8.1) */
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background: var(--gjv-navy);
+    color: var(--gjv-superficie);
+    border-bottom: 4px solid var(--gjv-acento);
+    padding: var(--gjv-e-4) var(--gjv-e-5);
+    box-sizing: border-box;
+}
+
+.title-container {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gjv-e-2);
+}
+
+.title {
+    font-size: var(--gjv-t-28);
+    font-weight: 700;
+    color: var(--gjv-superficie);
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gjv-e-3);
+    margin: 0;
+}
+
+.slogan {
+    font-size: var(--gjv-t-16);
+    font-style: italic;
+    color: var(--gjv-borde);
+    display: inline-block;
+}
+
+/* SIN margen negativo (§7.4) */
+.powered-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.powered-container {
+    text-align: right;
+}
+
+.powered-by {
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-borde);
+    font-style: italic;
+    text-align: right;
+    margin: var(--gjv-e-1) 0 0 0;
+}
+
+/* Sobre navy, el enlace necesita 4,5:1: el ámbar del kit lo cumple */
+.powered-by a {
+    color: var(--gjv-alerta);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.powered-by a:hover,
+.powered-by a:focus-visible {
+    text-decoration: underline;
+}
+
+/* -------------------------------------------------------- 4. TIPOGRAFÍA -- */
+
+h1 { font-size: var(--gjv-t-28); }
+h2 { font-size: var(--gjv-t-20); }
+h3 { font-size: var(--gjv-t-16); }
+
+h1, h2, h3 {
+    color: var(--gjv-navy);
+}
+
+small {
+    font-size: var(--gjv-t-14);
+}
+
+/* ----------------------------------------------------------- 5. BOTONES -- */
+
+button {
+    min-height: var(--gjv-alto-control);
+    padding: var(--gjv-e-2) var(--gjv-e-4);
+    margin-top: var(--gjv-e-2);
+    font-family: inherit;
+    font-size: var(--gjv-t-14);
+    background-color: var(--gjv-superficie);
+    color: var(--gjv-navy);
+    border: 1px solid var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-sm);
+    cursor: pointer;
+    transition: background var(--gjv-transicion), border-color var(--gjv-transicion);
+}
+
+button:hover:not(:disabled) {
+    border-color: var(--gjv-acento);
+    color: var(--gjv-acento-oscuro);
+}
+
+button:disabled {
+    background-color: var(--gjv-fondo);
+    color: var(--gjv-texto-3);
+    border-color: var(--gjv-borde);
+    cursor: not-allowed;
+}
+
+.btn-registrarse {
+    background-color: var(--gjv-acento);
+    color: var(--gjv-superficie);
+    border: none;
+    padding: var(--gjv-e-2) var(--gjv-e-4);
+    border-radius: var(--gjv-r-sm);
+    cursor: pointer;
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.btn-registrarse:hover:not(:disabled) {
+    background-color: var(--gjv-acento-oscuro);
+    color: var(--gjv-superficie);
+}
+
+#registroBtn {
+    padding: var(--gjv-e-1) var(--gjv-e-3);
+    font-size: var(--gjv-t-12);
+}
+
+/* Botones de descarga */
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--gjv-e-3);
+    margin-top: var(--gjv-e-3);
+}
+
+.button-container button {
+    padding: var(--gjv-e-3) var(--gjv-e-5);
+    border: none;
+    border-radius: var(--gjv-r-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--gjv-t-16);
+    margin: 0;
+}
+
+/* Un solo botón primario por pantalla: Descargar PDF.
+   Descargar TABLA es secundario (borde, sin relleno). */
+.button-container button.success {
+    background-color: var(--gjv-superficie);
+    color: var(--gjv-acento-oscuro);
+    border: 1px solid var(--gjv-acento);
+}
+
+.button-container button.success:hover:not(:disabled) {
+    background-color: var(--gjv-acento-tenue);
+    color: var(--gjv-acento-oscuro);
+}
+
+.button-container #downloadReportButton.success {
+    background-color: var(--gjv-acento);
+    color: var(--gjv-superficie);
+    border: 1px solid var(--gjv-acento);
+}
+
+.button-container #downloadReportButton.success:hover:not(:disabled) {
+    background-color: var(--gjv-acento-oscuro);
+    color: var(--gjv-superficie);
+}
+
+.button-container button.success:disabled {
+    background-color: var(--gjv-borde);
+    color: var(--gjv-texto-3);
+    border-color: var(--gjv-borde);
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .button-container button.success {
+        padding: var(--gjv-e-2) var(--gjv-e-4);
+        font-size: var(--gjv-t-14);
+    }
+}
+
+@media (max-width: 480px) {
+    .button-container button.success {
+        padding: var(--gjv-e-1) var(--gjv-e-3);
+        font-size: var(--gjv-t-12);
+    }
+}
+
+/* -------------------------------------------------- 6. MENSAJES DE ESTADO - */
+
+/* El texto siempre dice qué pasó; el color solo lo refuerza (§7.7) */
+.message {
+    padding: var(--gjv-e-2);
+    margin-bottom: var(--gjv-e-2);
+    border-radius: var(--gjv-r-sm);
+    border-left: 3px solid transparent;
+    font-size: var(--gjv-t-12);
+}
+
+.message.success {
+    background-color: var(--gjv-acento-tenue);
+    color: var(--gjv-acento-oscuro);
+    border-color: var(--gjv-exito);
+}
+
+.message.error {
+    background-color: #FEF2F2;
+    color: var(--gjv-peligro);
+    border-color: var(--gjv-peligro);
+}
+
+.message.warning {
+    background-color: #FFFBEB;
+    color: #92400E;
+    border-color: var(--gjv-alerta);
+}
+
+/* ------------------------------------------------ 7. ÁREA DE CLIENTES ---- */
+
+.info-box {
+    background-color: var(--gjv-fondo);
+    border: 1px solid var(--gjv-borde);
+    padding: var(--gjv-e-3);
+    margin-bottom: var(--gjv-e-3);
+    border-radius: var(--gjv-r-sm);
+}
+
+.info-box strong {
+    color: var(--gjv-navy);
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gjv-e-2);
+    margin-bottom: var(--gjv-e-1);
+}
+
+.ruc-info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--gjv-e-2);
+}
+
+.tipo-plan {
+    color: var(--gjv-texto-2);
+    font-size: var(--gjv-t-12);
+}
+
+/* ------------------------------------------------- 8. CARGA DE ARCHIVOS -- */
+
+.card-upload-principal {
+    background: var(--gjv-superficie);
+    border: 2px solid var(--gjv-acento);
+    border-radius: var(--gjv-r-lg);
+    padding: var(--gjv-e-4);
+    box-shadow: var(--gjv-sombra-sm);
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-upload-principal.dragover {
+    background: var(--gjv-acento-tenue);
+    border-color: var(--gjv-acento-oscuro);
+}
+
+.card-upload-secundaria {
+    background: var(--gjv-superficie);
+    border: 2px solid var(--gjv-borde);
+    border-radius: var(--gjv-r-lg);
+    padding: var(--gjv-e-4);
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: var(--gjv-e-5);
+}
+
+.card-upload-secundaria h3 {
+    margin: 0;
+    font-size: var(--gjv-t-16);
+    color: var(--gjv-navy);
+}
+
+.card-upload-secundaria .secundaria-header-row {
+    margin-bottom: var(--gjv-e-3);
+}
+
+.principal-header-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gjv-e-3);
+    margin-bottom: var(--gjv-e-3);
+}
+
+.secundaria-header-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gjv-e-3);
+}
+
+.badge-step {
+    background: var(--gjv-acento);
+    color: var(--gjv-superficie);
+    font-weight: 700;
+    font-size: var(--gjv-t-16);
+    width: var(--gjv-e-6);
+    height: var(--gjv-e-6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.badge-sec {
+    background: var(--gjv-texto-2);
+}
+
+.principal-titles h3 {
+    margin: 0 0 var(--gjv-e-1) 0;
+    font-size: var(--gjv-t-16);
+    color: var(--gjv-navy);
+}
+
+.principal-titles p {
+    margin: 0;
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-texto-2);
+}
+
+.principal-action-box {
+    display: flex;
+    align-items: center;
+    gap: var(--gjv-e-4);
+    background: var(--gjv-fondo);
+    border: 1px dashed var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-sm);
+    padding: var(--gjv-e-3) var(--gjv-e-4);
+}
+
+/* SIN gradiente ni desplazamiento en :hover (§7.8.1) */
+.btn-principal-upload {
+    background: var(--gjv-acento);
+    color: var(--gjv-superficie);
+    border: none;
+    padding: var(--gjv-e-2) var(--gjv-e-4);
+    border-radius: var(--gjv-r-sm);
+    font-weight: 600;
+    font-size: var(--gjv-t-14);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-principal-upload:hover:not(:disabled) {
+    background: var(--gjv-acento-oscuro);
+}
+
+.status-archivo-principal {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gjv-e-1);
+    font-size: var(--gjv-t-12);
+    padding: var(--gjv-e-1) var(--gjv-e-3);
+    border-radius: var(--gjv-r-sm);
+    background: var(--gjv-banda);
+    color: var(--gjv-texto-2);
+    border: 1px solid var(--gjv-borde-fuerte);
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-archivo-principal.cargado {
+    color: var(--gjv-acento-oscuro);
+    background: var(--gjv-acento-tenue);
+    border: 1px solid var(--gjv-acento-borde);
+    font-weight: 600;
+}
+
+.dos-uploads-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gjv-e-3);
+    margin-top: var(--gjv-e-3);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .dos-uploads-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.upload-subbox {
+    background: var(--gjv-superficie);
+    border: 1px dashed var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-md);
+    padding: var(--gjv-e-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gjv-e-2);
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.subbox-title {
+    margin: 0;
+    font-size: var(--gjv-t-14);
+    color: var(--gjv-navy);
+    font-weight: 700;
+}
+
+.subbox-hint {
+    margin: var(--gjv-e-1) 0 var(--gjv-e-2) 0;
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-texto-2);
+}
+
+/* La sub-caja de la comunicación SRI se distingue con el teal del producto */
+.subbox-title--sri,
+.subbox-hint--sri {
+    color: var(--gjv-teal-oscuro);
+}
+
+.upload-subbox--sri {
+    border-color: var(--gjv-teal-borde);
+}
+
+.subbox-action {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--gjv-e-3);
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.subbox-action input[type="file"] {
+    max-width: 100%;
+    box-sizing: border-box;
+    flex: 0 1 auto;
+}
+
+/* Campos de archivo: etiqueta visible asociada (§7.7).
+   La etiqueta se muestra al usuario y el `for` la enlaza con el input, de modo
+   que el lector de pantalla anuncia para qué sirve cada control. */
+.etiqueta-archivo {
+    display: inline-block;
+    font-size: var(--gjv-t-12);
+    font-weight: 600;
+    color: var(--gjv-navy);
+    margin-bottom: var(--gjv-e-1);
+}
+
+.input-archivo {
+    padding: var(--gjv-e-1) var(--gjv-e-3);
+    font-size: var(--gjv-t-12);
+    font-family: inherit;
+    color: var(--gjv-navy);
+    border: 1px solid var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-sm);
+    background: var(--gjv-superficie);
+    cursor: pointer;
+    max-width: 100%;
+}
+
+.input-archivo--acento {
+    border-color: var(--gjv-acento);
+    color: var(--gjv-acento-oscuro);
+    font-weight: 600;
+}
+
+.texto-opcional {
+    color: var(--gjv-teal-oscuro);
+    font-weight: 700;
+}
+
+.dropzone-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gjv-e-3);
+    margin-top: var(--gjv-e-3);
+    flex-wrap: wrap;
+}
+
+.lista-titulo {
+    margin-bottom: var(--gjv-e-2);
+    font-size: var(--gjv-t-16);
+    color: var(--gjv-navy);
+}
+
+#contenedorListaDocumentos {
+    margin-top: var(--gjv-e-4);
+}
+
+/* Espacios de la vista previa (antes márgenes en línea de 2 cm y 1 cm).
+   Se reducen lo justo para que la carta quepa en UNA hoja A4: con el contenido
+   de un caso real (encabezado, anexo, párrafo legal, tabla de 6 filas y firma)
+   los 2 cm de arriba y los 4 cm de la firma empujaban la firma a la página 2. */
+.vista-previa-espacio {
+    margin-top: 6mm;
+}
+
+.vista-previa-espacio-corto {
+    margin-top: 4mm;
+}
+
+.firma-linea {
+    margin-top: 22mm;
+}
+
+/* Dropzone */
+.upload-dropzone {
+    background: var(--gjv-fondo);
+    border: 2px dashed var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-lg);
+    padding: var(--gjv-e-5);
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.upload-dropzone.dragover {
+    background: var(--gjv-acento-tenue);
+    border-color: var(--gjv-acento);
+}
+
+.dropzone-icon {
+    font-size: var(--gjv-t-28);
+    margin-bottom: var(--gjv-e-2);
+}
+
+.dropzone-title {
+    font-size: var(--gjv-t-16);
+    font-weight: 700;
+    color: var(--gjv-navy);
+    margin: var(--gjv-e-1) 0;
+}
+
+.dropzone-subtitle {
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-texto-2);
+    margin-bottom: var(--gjv-e-3);
+}
+
+.btn-seleccionar-archivos {
+    background: var(--gjv-acento);
+    color: var(--gjv-superficie);
+    border: none;
+    padding: var(--gjv-e-2) var(--gjv-e-4);
+    border-radius: var(--gjv-r-sm);
+    font-size: var(--gjv-t-14);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-seleccionar-archivos:hover:not(:disabled) {
+    background: var(--gjv-acento-oscuro);
+}
+
+.contador-badge {
+    display: inline-block;
+    background: var(--gjv-banda);
+    color: var(--gjv-navy);
+    font-size: var(--gjv-t-12);
+    font-weight: 600;
+    padding: var(--gjv-e-1) var(--gjv-e-3);
+    border-radius: var(--gjv-r-lg);
+}
+
+/* Lista de documentos */
+.documentos-lista-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gjv-e-2);
+}
+
+.doc-item-row {
+    background: var(--gjv-superficie);
+    border: 1px solid var(--gjv-borde);
+    border-radius: var(--gjv-r-sm);
+    padding: var(--gjv-e-2) var(--gjv-e-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gjv-e-3);
+}
+
+.doc-item-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.doc-item-name {
+    font-weight: 600;
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-navy);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.doc-item-meta {
+    font-size: var(--gjv-t-11);
+    color: var(--gjv-texto-2);
+    display: flex;
+    gap: var(--gjv-e-2);
+    align-items: center;
+    margin-top: var(--gjv-e-1);
+}
+
+.doc-item-category-select {
+    padding: var(--gjv-e-1) var(--gjv-e-2);
+    font-size: var(--gjv-t-12);
+    border-radius: var(--gjv-r-sm);
+    border: 1px solid var(--gjv-borde-fuerte);
+    background: var(--gjv-superficie);
+    color: var(--gjv-navy);
+    font-family: inherit;
+}
+
+.doc-item-remove-btn {
+    background: #FEF2F2;
+    color: var(--gjv-peligro);
+    border: none;
+    width: var(--gjv-e-6);
+    height: var(--gjv-e-6);
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.doc-item-remove-btn:hover:not(:disabled) {
+    background: #FEE2E2;
+}
+
+/* Estado vacío de la lista (§7.5) */
+.lista-vacia {
+    padding: var(--gjv-e-5);
+    text-align: center;
+    color: var(--gjv-texto-2);
+    font-size: var(--gjv-t-12);
+    background: var(--gjv-superficie);
+    border: 1px dashed var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-md);
+}
+
+/* ------------------------------------------------- 9. DATOS EXTRAÍDOS ---- */
+
+#datos-completos,
+#datos-archivos {
+    background-color: var(--gjv-fondo);
+    border: 1px solid var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-sm);
+    padding: var(--gjv-e-3);
+}
+
+#datos-archivos {
+    margin-top: var(--gjv-e-2);
+    font-size: var(--gjv-t-12);
+}
+
+.datos-titulo {
+    font-weight: 700;
+    color: var(--gjv-navy);
+    margin-bottom: var(--gjv-e-2);
+    font-size: var(--gjv-t-12);
+    display: flex;
+    align-items: center;
+    gap: var(--gjv-e-1);
+}
+
+.datos-linea {
+    margin: var(--gjv-e-1) 0;
+    font-size: var(--gjv-t-12);
+    line-height: 1.35;
+    color: var(--gjv-navy);
+}
+
+.datos-ruc {
+    font-family: var(--gjv-fuente-mono);
+    font-weight: 700;
+    color: var(--gjv-acento-oscuro);
+}
+
+.datos-nombre {
+    font-weight: 600;
+    color: var(--gjv-navy);
+}
+
+.datos-tramite {
+    margin-top: var(--gjv-e-2);
+    padding: var(--gjv-e-2);
+    background: var(--gjv-acento-tenue);
+    border-left: 3px solid var(--gjv-acento);
+    border-radius: var(--gjv-r-sm);
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-acento-oscuro);
+}
+
+.datos-declaracion {
+    margin-top: var(--gjv-e-2);
+    padding: var(--gjv-e-2);
+    background: var(--gjv-superficie);
+    border: 1px solid var(--gjv-borde-fuerte);
+    border-radius: var(--gjv-r-sm);
+    font-size: var(--gjv-t-12);
+    line-height: 1.45;
+    color: var(--gjv-navy);
+    overflow: hidden;
+}
+
+.datos-declaracion > div {
+    white-space: nowrap;
+}
+
+/* Caja de la comunicación SRI */
+.datos-sri {
+    margin-top: var(--gjv-e-2);
+    padding: var(--gjv-e-2) var(--gjv-e-3);
+    background: var(--gjv-teal-tenue);
+    border-left: 4px solid var(--gjv-teal);
+    border-radius: var(--gjv-r-sm);
+    font-size: var(--gjv-t-12);
+    color: var(--gjv-teal-oscuro);
+}
+
+/* ------------------------------------------------------- 10. ERRORES ------ */
+
+.campo-error {
+    color: var(--gjv-peligro);
+    font-size: var(--gjv-t-12);
+    font-weight: 600;
+    margin: var(--gjv-e-1) 0;
+}
+
+/* --------------------------------------------- 11. VISTA PREVIA (CARTA) -- */
+
+#formulario,
+#vista-previa {
+    margin-bottom: var(--gjv-e-5);
+}
+
+/* La vista previa es un documento: fondo blanco y tipografía de sistema,
+   sin depender de que Inter esté cargada, porque se imprime. */
+#vista-previa {
+    background-color: var(--gjv-superficie);
+    padding: var(--gjv-e-5);
+    font-family: var(--gjv-fuente);
+    margin: var(--gjv-e-4) auto var(--gjv-e-1) auto;
+    border-radius: var(--gjv-r-md);
+    box-sizing: border-box;
+    box-shadow: var(--gjv-sombra-sm);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    #vista-previa {
+        width: 100%;
+        padding: var(--gjv-e-3);
+        box-sizing: border-box;
+    }
+}
+
+.anexo-comunicacion-sri {
+    margin: var(--gjv-e-3) 0 var(--gjv-e-4);
+    line-height: 1.35;
+}
+
+.anexo-datos-sri {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: var(--gjv-e-2);
+    align-items: baseline;
+}
+
+/* La tabla de certificación vive en un contenedor con desplazamiento (§7.8.1) */
+.tabla-envoltura {
+    width: 100%;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.tabla-certificacion {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    background: var(--gjv-superficie);
+    font-size: var(--gjv-t-12);
+    table-layout: fixed;      /* los anchos se respetan; no los decide el contenido */
+}
+
+.tabla-certificacion th {
+    background: var(--gjv-banda);
+    color: var(--gjv-navy);
+    font-size: var(--gjv-t-11);
+    font-weight: 600;
+    text-align: left;
+    padding: var(--gjv-e-2);
+    border: 1px solid var(--gjv-borde-fuerte);
+}
+
+.tabla-certificacion td {
+    padding: var(--gjv-e-2);
+    border: 1px solid var(--gjv-borde-fuerte);
+    text-align: left;
+    vertical-align: top;
+}
+
+/* Columna del nombre: se lleva el espacio que queda y PUEDE partirse.
+   Antes llevaba `white-space: nowrap`, y por eso los nombres largos se salían
+   de la hoja y el hash quedaba cortado. */
+.tabla-certificacion .nombre {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* Columna del hash: ancho fijo para los 32 caracteres, y NO se parte.
+   Un MD5 cortado en dos líneas deja de poder compararse.
+
+   EL ANCHO NO ES ARBITRARIO. Un MD5 son 32 caracteres y la fuente mono avanza
+   0,60 em por carácter:
+       32 x 0,60 x 11px = 211,2 px = 55,9 mm  solo de tinta
+   más el padding de la celda. Con 60 mm no cabía y se perdían los últimos
+   dígitos. 68 mm deja 12 mm de holgura para el padding y para que el visor no
+   recorte. El espacio sale de la columna del nombre, que puede partirse. */
+.tabla-certificacion th.hash,
+.tabla-certificacion td.hash {
+    width: 68mm;
+    text-align: center;
+    font-family: var(--gjv-fuente-mono);
+    font-size: var(--gjv-t-11);
+    white-space: nowrap;
+}
+
+/* Separación entre la tabla y el párrafo siguiente ("Atentamente").
+   Antes quedaban pegados. */
+.tabla-envoltura + p {
+    margin-top: var(--gjv-e-7);
+}
+
+/* Título de la carta: mayúsculas y negrita, como corresponde a un documento
+   oficial. `text-transform` y no el literal en mayúsculas: así el texto sigue
+   siendo legible para un lector de pantalla y para la extracción del PDF.
+
+   El tamaño es 20px, dentro de la escala del kit (§7.2). Es el título del
+   documento y tiene que resaltar sobre el cuerpo de 14px: con 14px se leía
+   como un párrafo más. A 20px son 99 caracteres en dos líneas dentro de los
+   170 mm útiles de la A4, que es como debe leerse un encabezado. */
+.titulo-carta {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: var(--gjv-t-20);
+    line-height: 1.3;
+    text-align: center;
+    color: var(--gjv-navy);
+    margin: 0 0 var(--gjv-e-5) 0;
+}
+
+/* ------------------------------------------------ 12. MODAL DE CONFIRMACIÓN - */
+
+.aviso-confirmacion {
+    margin: var(--gjv-e-5) 0;
+    padding: var(--gjv-e-4);
+    background: var(--gjv-acento-tenue);
+    border-left: 4px solid var(--gjv-acento);
+    border-radius: var(--gjv-r-sm);
+}
+
+.aviso-confirmacion strong {
+    color: var(--gjv-acento-oscuro);
+}
+
+.confirmacion-alerta {
+    text-align: center;
+    margin-bottom: var(--gjv-e-3);
+    font-weight: 600;
+    color: #92400E;
+}
+
+.confirmacion-pie {
+    margin-top: var(--gjv-e-3);
+    text-align: center;
+    color: #92400E;
+}
+
+.confirmacion-contacto {
+    text-align: center;
+    padding: var(--gjv-e-3);
+    background: var(--gjv-banda);
+    border-radius: var(--gjv-r-sm);
+    margin-top: var(--gjv-e-4);
+    color: var(--gjv-navy);
+}
+
+.confirmacion-cierre {
+    text-align: center;
+    margin-top: var(--gjv-e-4);
+    color: var(--gjv-texto-2);
+}
+
+.advertencia-item {
+    padding: var(--gjv-e-1) 0;
+}
+
+/* ------------------------------------------------------- 13. IMPRESIÓN --- */
+
+/* Única sección donde se admite color literal: los motores de impresión no
+   heredan variables de forma fiable. */
+@media print {
+    #reintegro-container,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    /* La carta va en UNA sola hoja. Se comprime lo que no es contenido:
+       espacios decorativos, sombras y separaciones grandes. */
+    #vista-previa {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        font-size: 11px;
+    }
+
+    .vista-previa-espacio,
+    .vista-previa-espacio-corto {
+        margin-top: 0;
+        height: 0;
+    }
+
+    .firma-linea {
+        margin-top: 14mm;
+    }
+
+    .titulo-carta {
+        /* En la hoja se reduce a 15px, no a 12: el título tiene que seguir
+           resaltando sobre un cuerpo que en impresión baja a 11px. */
+        font-size: 15px;
+        margin-bottom: 4mm;
+    }
+
+    .tabla-envoltura + p {
+        margin-top: 6mm;
+    }
+
+    .tabla-certificacion {
+        font-size: 9px;
+    }
+
+    .tabla-certificacion th,
+    .tabla-certificacion td {
+        padding: 2px 4px;
+    }
+
+    .tabla-certificacion th.hash,
+    .tabla-certificacion td.hash {
+        /* A 8px, los 32 caracteres miden 32 x 0,60 x 8 = 153,6 px = 40,6 mm.
+           Se dejan 54 mm: sigue entrando y libera espacio para el nombre. */
+        width: 54mm;
+        font-size: 8px;
+    }
+
+    #firma-certificacion p {
+        margin: 2px 0;
+    }
+
+    /* La cabecera de tabla se repite en cada página (§7.8.2) */
+    thead {
+        display: table-header-group;
+    }
+
+    /* Ni una fila ni el bloque de firma se parten entre páginas */
+    tr,
+    thead,
+    tfoot {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    #firma-certificacion {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    h1, h2, h3 {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    @page {
+        size: A4 portrait;
+        margin: 12mm 10mm;
+    }
+}

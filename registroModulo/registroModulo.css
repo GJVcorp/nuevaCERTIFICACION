@@ -1,0 +1,439 @@
+/* ==========================================================================
+   creaCERTIFICACION — Estilos del módulo de registro
+   Estándar GJVcorp v1.1 · §7.2 a §7.8
+   --------------------------------------------------------------------------
+   REGLA: aquí NO se escribe ningún color literal. Todo sale de los tokens de
+   `marca/base.css`, que se enlaza antes que esta hoja.
+
+   Los gradientes decorativos están prohibidos (§7.3): los que había en la
+   cabecera y en los botones se han sustituido por color plano.
+   ========================================================================== */
+
+/* ==================== MODAL DE CONFIRMACIÓN (ÉXITO) ==================== */
+
+#modalConfirmacion {
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--gjv-velo);
+  animation: rm-fadeIn 0.3s ease;
+}
+
+#modalConfirmacion .confirmacion-body {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+#modalConfirmacion #contenidoConfirmacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gjv-e-2);
+}
+
+/* Filas tipo "RUC: ..." */
+#modalConfirmacion .dato-item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gjv-e-3);
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  border: 1px solid var(--gjv-borde);
+  border-radius: var(--gjv-r-sm);
+  background: var(--gjv-superficie);
+  font-size: var(--gjv-t-14);
+}
+
+#modalConfirmacion .dato-item strong {
+  color: var(--gjv-navy);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Bloque de advertencia */
+#modalConfirmacion .separador {
+  margin-top: var(--gjv-e-3);
+  padding: var(--gjv-e-4);
+  background: var(--gjv-aviso-fondo);
+  border: 1px solid var(--gjv-aviso-borde);
+  border-left: 5px solid var(--gjv-alerta);
+  border-radius: var(--gjv-r-sm);
+}
+
+#modalConfirmacion .separador h3 {
+  margin: 0 0 var(--gjv-e-3) 0;
+  text-align: center;
+  color: var(--gjv-aviso-texto);
+  font-size: var(--gjv-t-16);
+  font-weight: 700;
+}
+
+#modalConfirmacion .advertencia-item {
+  padding: var(--gjv-e-2) var(--gjv-e-3);
+  margin: var(--gjv-e-2) 0;
+  background: var(--gjv-superficie);
+  border-radius: var(--gjv-r-sm);
+  border: 1px solid var(--gjv-aviso-borde);
+  color: var(--gjv-aviso-texto);
+  font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  #modalConfirmacion .confirmacion-body {
+    padding: var(--gjv-e-4);
+  }
+  #modalConfirmacion .dato-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.modal-content-confirmacion {
+  background: var(--gjv-superficie);
+  border-radius: var(--gjv-r-lg);
+  max-width: 600px;
+  width: 90vw;
+  margin: var(--gjv-e-7) auto;
+  box-shadow: var(--gjv-sombra-md);
+  padding: 0 0 var(--gjv-e-5) 0;
+  animation: rm-slideDown 0.4s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.confirmacion-header {
+  background: var(--gjv-acento);
+  color: var(--gjv-superficie);
+  padding: var(--gjv-e-6) var(--gjv-e-5) var(--gjv-e-4) var(--gjv-e-5);
+  text-align: center;
+  border-top-left-radius: var(--gjv-r-lg);
+  border-top-right-radius: var(--gjv-r-lg);
+}
+
+.confirmacion-header h2 {
+  margin: 0;
+  font-size: var(--gjv-t-28);
+  font-weight: 700;
+}
+
+.confirmacion-body {
+  padding: var(--gjv-e-6) var(--gjv-e-6) var(--gjv-e-3) var(--gjv-e-6);
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-14);
+}
+
+.confirmacion-footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--gjv-e-4) 0 0 0;
+}
+
+.btn-primary-confirmacion {
+  background: var(--gjv-acento);
+  color: var(--gjv-superficie);
+  border: none;
+  border-radius: var(--gjv-r-sm);
+  padding: var(--gjv-e-3) var(--gjv-e-6);
+  font-family: inherit;
+  font-size: var(--gjv-t-14);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary-confirmacion:hover:not(:disabled) {
+  background: var(--gjv-acento-oscuro);
+}
+
+/* Ajustes para los datos y advertencias dentro del modal */
+.separador {
+  margin: var(--gjv-e-5) 0 var(--gjv-e-3) 0;
+  padding: var(--gjv-e-4) var(--gjv-e-3) var(--gjv-e-3) var(--gjv-e-3);
+  background: var(--gjv-aviso-fondo);
+  border-left: 4px solid var(--gjv-alerta);
+  border-radius: var(--gjv-r-sm);
+  text-align: center;
+}
+
+.advertencia-item {
+  color: var(--gjv-aviso-texto);
+  font-weight: 600;
+  margin: var(--gjv-e-1) 0;
+}
+
+/* ============ MODAL PROFESIONAL Y BLOQUE SALDO/PLAN ============ */
+
+.modal-suscripcion {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--gjv-velo);
+  animation: rm-fadeIn 0.3s ease;
+}
+
+@keyframes rm-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content-suscripcion {
+  background: var(--gjv-superficie);
+  margin: 2% auto;
+  padding: 0;
+  border-radius: var(--gjv-r-lg);
+  width: 90%;
+  max-width: 800px;
+  max-height: 92vh;
+  box-shadow: var(--gjv-sombra-md);
+  animation: rm-slideDown 0.4s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes rm-slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal {
+  position: absolute;
+  right: var(--gjv-e-5);
+  top: var(--gjv-e-4);
+  color: var(--gjv-superficie);
+  font-size: var(--gjv-t-28);
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.close-modal:hover {
+  color: var(--gjv-borde);
+}
+
+.modal-header-suscripcion {
+  background: var(--gjv-navy);
+  padding: var(--gjv-e-6);
+  text-align: center;
+  color: var(--gjv-superficie);
+  position: relative;
+}
+
+.modal-header-suscripcion h2 {
+  margin: 0 0 var(--gjv-e-3) 0;
+  font-size: var(--gjv-t-20);
+  font-weight: 700;
+}
+
+.modal-subtitulo {
+  margin: 0;
+  font-size: var(--gjv-t-14);
+  color: var(--gjv-borde);
+}
+
+.modal-body-suscripcion {
+  padding: var(--gjv-e-6);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.modal-body-suscripcion::-webkit-scrollbar { width: var(--gjv-e-2); }
+.modal-body-suscripcion::-webkit-scrollbar-track {
+  background: var(--gjv-banda);
+  border-radius: var(--gjv-r-sm);
+}
+.modal-body-suscripcion::-webkit-scrollbar-thumb {
+  background: var(--gjv-acento);
+  border-radius: var(--gjv-r-sm);
+}
+
+.modal-footer-suscripcion {
+  padding: var(--gjv-e-5) var(--gjv-e-6);
+  background: var(--gjv-fondo);
+  display: flex;
+  gap: var(--gjv-e-3);
+  justify-content: center;
+}
+
+/* Un solo botón primario por pantalla: el de confirmar.
+   Cancelar es secundario y no compite en color (§7.3). */
+.btn-primary-modal,
+.btn-secondary-modal {
+  padding: var(--gjv-e-3) var(--gjv-e-5);
+  border: none;
+  border-radius: var(--gjv-r-sm);
+  font-family: inherit;
+  font-size: var(--gjv-t-14);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary-modal {
+  background: var(--gjv-acento);
+  color: var(--gjv-superficie);
+  flex: 1;
+}
+
+.btn-primary-modal:hover:not(:disabled) {
+  background: var(--gjv-acento-oscuro);
+}
+
+.btn-primary-modal:disabled {
+  background: var(--gjv-borde);
+  color: var(--gjv-texto-3);
+  cursor: progress;
+}
+
+.btn-secondary-modal {
+  background: var(--gjv-superficie);
+  color: var(--gjv-navy);
+  border: 1px solid var(--gjv-borde-fuerte);
+  flex: 0.5;
+}
+
+.btn-secondary-modal:hover:not(:disabled) {
+  border-color: var(--gjv-acento);
+  color: var(--gjv-acento-oscuro);
+}
+
+.formulario-registro {
+  background: var(--gjv-superficie);
+  padding: var(--gjv-e-5);
+  border-radius: var(--gjv-r-md);
+  margin-bottom: var(--gjv-e-5);
+  box-shadow: var(--gjv-sombra-sm);
+}
+
+.form-group { margin-bottom: var(--gjv-e-5); }
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--gjv-e-2);
+  font-weight: 600;
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-14);
+}
+
+.form-group .required {
+  color: var(--gjv-peligro);
+  font-weight: 700;
+}
+
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: var(--gjv-e-3);
+  border: 2px solid var(--gjv-borde);
+  border-radius: var(--gjv-r-sm);
+  font-size: var(--gjv-t-14);
+  font-family: inherit;
+  color: var(--gjv-navy);
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--gjv-acento);
+  box-shadow: var(--gjv-foco);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-group small {
+  display: block;
+  margin-top: var(--gjv-e-1);
+  color: var(--gjv-texto-2);
+  font-size: var(--gjv-t-12);
+}
+
+/* Info saldo */
+.info-saldo-box {
+  background: var(--gjv-acento-tenue);
+  border: 2px solid var(--gjv-acento-borde);
+  border-radius: var(--gjv-r-md);
+  padding: var(--gjv-e-5);
+  margin: var(--gjv-e-5) 0;
+}
+
+.saldo-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gjv-e-3);
+  margin-bottom: var(--gjv-e-3);
+  flex-wrap: wrap;
+}
+
+.monto-destacado {
+  font-size: var(--gjv-t-28);
+  font-weight: 700;
+  color: var(--gjv-acento-oscuro);
+  margin: 0;
+}
+
+.saldo-descripcion {
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-12);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Plan sugerido */
+.plan-sugerido {
+  margin-top: var(--gjv-e-3);
+  padding: var(--gjv-e-3);
+  background: var(--gjv-aviso-fondo);
+  border-left: 4px solid var(--gjv-alerta);
+  border-radius: var(--gjv-r-sm);
+  text-align: center;
+  color: var(--gjv-aviso-texto);
+}
+
+.plan-sugerido__fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gjv-e-1);
+}
+
+.plan-sugerido__nota {
+  margin: var(--gjv-e-1) 0 0 0;
+  font-size: var(--gjv-t-12);
+}
+
+/* Beneficios */
+.beneficios-registro {
+  background: var(--gjv-fondo);
+  padding: var(--gjv-e-5);
+  border-radius: var(--gjv-r-sm);
+  border-left: 4px solid var(--gjv-acento);
+  margin-top: var(--gjv-e-5);
+}
+
+.beneficios-registro h4 {
+  margin: 0 0 var(--gjv-e-3) 0;
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-16);
+}
+
+.beneficios-registro ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.beneficios-registro li {
+  padding: var(--gjv-e-2) 0;
+  color: var(--gjv-navy);
+  font-size: var(--gjv-t-14);
+}

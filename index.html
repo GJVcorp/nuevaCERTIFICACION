@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Certificación en PDF</title>
+    <link rel="icon" type="image/svg+xml" href="marca/favicon.svg" />
+    <link rel="stylesheet" href="marca/base.css">
+    <link rel="stylesheet" href="styles.css">
+    <link id="iva-registro-css" rel="stylesheet" href="registroModulo/registroModulo.css?v=45.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
+</head>
+<body>
+
+    <header class="header">
+        <h1 class="title">recuperaIVA - recuperaRTA</h1>
+        <div class="powered-wrapper">
+            <div class="powered-container">
+                <p class="powered-by">
+                    powered by <a href="https://youtube.com/shorts/hdSugISiGcE?feature=share" target="_blank" class="rentabilidad">rentabilidadECUADOR</a>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <h1>GENERADOR DE CERTIFICACION</h1>
+        <div class="cards-container">
+    <div id="area-proceso">
+        <h2>Procesar Archivos</h2>
+
+        <div class="columns-container">
+            <div class="column1">
+
+                <!-- 1. ÁREA PRINCIPAL: documento del trámite previo + comunicación opcional -->
+                <div class="card-upload-principal">
+                    <div class="principal-header-row">
+                        <span class="badge-step">1</span>
+                        <div class="principal-titles">
+                            <h3>Certificación como paso adicional del trámite</h3>
+                        </div>
+                    </div>
+
+                    <div class="dos-uploads-grid">
+                        <!-- Upload 1: Solicitud de Devolución PDF -->
+                        <div class="upload-subbox">
+                            <h4 class="subbox-title">📄 Solicitud de Devolución (PDF)</h4>
+                            <p class="subbox-hint">
+                                ℹ️ Suba el PDF generado en el trámite previo. Puede provenir de recuperaIVA o recuperaRTA; la certificación identifica el origen automáticamente.
+                            </p>
+                            <div class="subbox-action">
+                                <label class="etiqueta-archivo" for="inputSolicitudPDF">Solicitud de devolución</label>
+                                <input type="file" id="inputSolicitudPDF" accept="application/pdf,.pdf" onchange="cargarSolicitudPDF(event);" class="input-archivo">
+                                <span id="statusSolicitudPDF" class="status-archivo-principal">Sin cargar</span>
+                            </div>
+                            <div class="column2" id="datos-txt" hidden>
+                                <div id="datos-completos">
+                                    <div class="datos-titulo">
+                                        <span>📊 Datos extraídos del trámite</span>
+                                    </div>
+                                    <div class="datos-linea">
+                                        <div><strong>CONTRIBUYENTE:</strong></div>
+                                        <div><span id="ruc-txt" class="datos-ruc"></span></div>
+                                        <div><span id="nombre-contribuyente-txt" class="datos-nombre"></span></div>
+                                    </div>
+                                    <p id="mensaje-error-ruc" class="campo-error" hidden></p>
+                                    <div class="datos-tramite">
+                                        <strong>TRÁMITE:</strong> <span id="tipo-tramite-detectado">Por identificar</span>
+                                    </div>
+
+                                    <div id="datos-declaracion" class="datos-declaracion" hidden>
+                                        <div><strong>PERÍODO:</strong> desde <span id="periodo-desde"></span> hasta <span id="periodo-hasta"></span></div>
+                                        <div><strong>MONTO DE RECUPERACIÓN:</strong> USD <span id="prev-dec-saldo-credito"></span></div>
+                                        <span id="prev-dec-periodo-fiscal" hidden></span>
+                                        <span id="prev-dec-numero-serial" hidden></span>
+                                    </div>
+                                    <p id="mensaje-error-declaracion" class="campo-error" hidden></p>
+                                </div>
+                                <div id="datos-archivos" hidden>
+                                    <p class="datos-titulo">Resumen de archivos de soporte</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upload 2: Comunicación SRI PDF (Opcional) -->
+                        <div class="upload-subbox upload-subbox--sri">
+                            <h4 class="subbox-title subbox-title--sri">📩 Comunicación SRI a Responder (PDF) <small class="texto-opcional">(opcional)</small></h4>
+                            <p class="subbox-hint subbox-hint--sri">
+                                ℹ️ Suba el PDF de la Comunicación del SRI únicamente si este trámite responde a una notificación o requerimiento de la entidad.
+                            </p>
+                            <div class="subbox-action">
+                                <label class="etiqueta-archivo" for="inputComunicacionPDF">Comunicación del SRI</label>
+                                <input type="file" id="inputComunicacionPDF" accept="application/pdf,.pdf" onchange="cargarComunicacionPDF(event);" class="input-archivo">
+                                <span id="statusComunicacionPDF" class="status-archivo-principal">Opcional - Sin cargar</span>
+                            </div>
+                            <p id="errorComunicacionSRI" class="campo-error" hidden></p>
+                            <div id="datosComunicacionSRI" class="datos-sri" hidden>
+                                <div><strong>NÚMERO DE TRÁMITE:</strong> <span id="comunicacion-numero-tramite"></span></div>
+                                <div><strong>NÚMERO DE <span id="comunicacion-tipo-documento">OFICIO</span>:</strong> <span id="comunicacion-numero-oficio"></span></div>
+                                <span id="comunicacion-ruc" hidden></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. ÁREA SECUNDARIA: Carga de Documentos Adicionales de Soporte (Hasta 10 max) -->
+                <div class="card-upload-secundaria">
+                    <div class="secundaria-header-row">
+                        <span class="badge-step badge-sec">2</span>
+                        <h3>Documentos digitales de soporte (hasta 10 archivos)</h3>
+                    </div>
+
+                    <div class="upload-dropzone" id="dropzone" role="button" tabindex="0" aria-label="Zona para arrastrar o seleccionar documentos de soporte" onclick="abrirSelectorSoportes(event);" onkeydown="if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); abrirSelectorSoportes(event); }" ondragover="event.preventDefault(); this.classList.add('dragover');" ondragleave="this.classList.remove('dragover');" ondrop="event.preventDefault(); this.classList.remove('dragover'); manejarArchivosDrop(event);">
+                        <div class="dropzone-icon" aria-hidden="true">📁</div>
+                        <p class="dropzone-title">Seleccione o arrastre archivos adicionales aquí</p>
+                        <p class="dropzone-subtitle">Formatos aceptados: .pdf, .xls, .xlsx (máximo 10 documentos en total)</p>
+                        <div class="dropzone-acciones">
+                            <label class="etiqueta-archivo" for="multiFileInput">Documentos de soporte</label>
+                            <input type="file" id="multiFileInput" accept="application/pdf,.pdf,.xls,.xlsx" multiple onclick="event.stopPropagation();" onchange="manejarArchivosSeleccionados(event);" class="input-archivo input-archivo--acento">
+                            <div id="contadorDocsBadge" class="contador-badge">Archivos: 0 / 10</div>
+                        </div>
+                        <p id="mensajeCargaSoportes" class="campo-error" hidden></p>
+                    </div>
+
+                    <!-- Lista interactiva de documentos cargados -->
+                    <div id="contenedorListaDocumentos" hidden>
+                        <h3 class="lista-titulo">Lista de documentos incluidos:</h3>
+                        <div id="listaDocumentosUI" class="documentos-lista-container">
+                            <!-- H4: estado vacío con texto útil (§7.5) -->
+                            <p class="lista-vacia">Todavía no ha añadido documentos de soporte. Arrastre archivos a la zona superior o use el botón «Documentos de soporte».</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="area-clientes">
+                <h2>Área de Clientes</h2>
+
+                <div class="info-box">
+                    <div class="info-header">
+                        <div class="ruc-info">
+                            <strong>RUC:</strong> <span id="rucRUC"></span>
+                            <div id="fechaRegistro" class="fecha-registro"></div>
+                            <div id="tipoPlan" class="tipo-plan" hidden></div>
+                        </div>
+                        <button id="registroBtn" class="btn-registrarse" hidden>Registrarse</button>
+                    </div>
+
+                    <!-- Mensajes de estado. role=status hace que el lector de
+                         pantalla anuncie el cambio sin robar el foco (§7.7). -->
+                    <div id="resultado" class="message" role="status" aria-live="polite"></div>
+
+                </div>
+
+                <!-- Botones de descarga (Deshabilitados hasta verificar RUC) -->
+                <div class="button-container">
+                    <button id="downloadReportButton2" class="success" disabled>Descargar tabla</button>
+                    <button id="downloadReportButton" class="success" disabled>Descargar PDF</button>
+                </div>
+
+                <div id="vista-previa" hidden oncontextmenu="return false;">
+                    <div class="vista-previa-espacio"></div>
+
+                    <h2 class="titulo-carta">Carta de certificación y responsabilidad de la información para el ingreso de documentación digital</h2>
+                    <!-- Igual que el párrafo: sin saltos ni indentación dentro. -->
+                    <p id="anexo-comunicacion-sri" class="anexo-comunicacion-sri" hidden><strong>ANEXO:</strong> <span class="anexo-datos-sri"><span>NÚMERO DE TRÁMITE:</span><span id="anexo-numero-tramite"></span><span>NÚMERO DE <span id="anexo-tipo-documento">OFICIO</span>:</span><span id="anexo-numero-oficio"></span></span></p>
+
+
+                    <p>Señores</p>
+                    <p>SERVICIO DE RENTAS INTERNAS</p>
+
+                    <p>Lugar y fecha de presentación: <span id="prev-canton"></span>, <span id="fecha-actual"></span></p>
+
+                    <div class="vista-previa-espacio-corto"></div>
+
+                    <!-- El párrafo va en UNA sola línea, sin saltos ni indentación.
+                         Los espacios y saltos del propio marcado se convierten en
+                         nodos de texto, y al exportar a PDF el reconstruir del texto
+                         los pierde: las palabras salen pegadas. Ya pasó. -->
+                    <p id="parrafo-certificacion">De conformidad con lo establecido en la resolución NAC-DGERCGC16-00000152, por medio de la presente carta, Yo, <span id="prev-nombre"></span><span id="segmento-cedula-cert">, con cédula de ciudadanía o identidad No. <span id="prev-cedula"></span></span><span id="cert-rol"></span> <span id="nombreRUC"></span><span id="segmento-ruc-cert">RUC No. <span id="prev-ruc"></span></span>, con domicilio tributario en <span id="prev-direccion"></span></p>
+                    <p>Entrego información digital de soporte para revisión del Servicio de Rentas Internas. Esta entrega la realizo dentro del trámite: <strong id="nombre-tramite-legal">SOLICITUD PARA LA DEVOLUCIÓN DE RETENCIONES DE IVA NO COMPENSADAS</strong></p>
+                    <p>La información adjunta, presentada ante la Administración Tributaria, es fiel copia de los documentos o archivos originales que reposan en mis archivos, la misma que se lista a continuación: </p>
+                    <p>Información digital ingresada: Cantidad de documentos digitales ingresados: <span id="cantidad-docs-digitales"></span></p>
+
+                    <div id="tabla-previa" class="tabla-envoltura" hidden></div>
+
+                    <p>Atentamente</p>
+
+
+                    <div id="firma-certificacion">
+                        <p class="firma-linea">------------------------------</p>
+
+                        <!-- SOCIEDAD: 4 líneas -->
+                        <p id="linea-rep-nombre-doc" hidden>
+                            <span id="prev-rep-nombre-doc"></span>
+                        </p>
+
+                        <p id="linea-rep-cedula-doc" hidden>
+                            C.I. <span id="prev-rep-cedula-doc"></span>
+                        </p>
+
+                        <p id="linea-razon-social-doc" hidden>
+                            <span id="prev-razon-social-doc"></span>
+                        </p>
+
+                        <p id="linea-firma-ruc-doc-soc" hidden>
+                            RUC No. <span id="prev-ruc-doc-soc"></span>
+                        </p>
+
+                        <!-- PERSONA NATURAL: 2 líneas -->
+                        <p id="linea-firma-nombre-doc" hidden>
+                            <span id="prev-nombre-doc"></span>
+                        </p>
+
+                        <p id="linea-firma-ruc-doc-per" hidden>
+                            <span id="prev-identificacion-label">RUC No.</span> <span id="prev-ruc-doc-per"></span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+
+
+    
+    <script>
+        function obtenerFechaFormateada() {
+            const fecha = new Date();
+            const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
+            return fecha.toLocaleDateString('es-EC', opciones).replace(/de(?=[a-zA-Z])/g, 'de ');
+        }
+        document.getElementById('fecha-actual').textContent = obtenerFechaFormateada();
+
+        function mostrarVistaPrevia() {
+            document.getElementById('vista-previa').style.display = 'block';
+        }
+    
+        function habilitarTodos() {
+            const inputs = [
+                'ivaInput',
+                'valorMesInput',
+                'libroRetIVA1Input',
+                'libroVTASInput',
+                'listadoPDFInput',
+                'solicitudDevolucionInput',
+                'listadoXLSInput'
+            ];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.disabled = false;
+                }
+            });
+        }
+        
+    </script>
+
+<!-- Modal de Renovación/Registro de Clientes -->
+<div id="modalSuscripcion" class="modal-suscripcion" hidden role="dialog" aria-modal="true" aria-labelledby="tituloModalRegistro">
+	<div class="modal-content-suscripcion">
+		<span class="close-modal" id="closeModal" role="button" tabindex="0" aria-label="Cerrar">&times;</span>
+		<div class="modal-header-suscripcion">
+			<h2 id="tituloModalRegistro">🔄 Renovación / Registro para Recuperación de IVA</h2>
+			<p class="modal-subtitulo">Complete o verifique sus datos para generar su Solicitud (válido 30 días)</p>
+		</div>
+		<div class="modal-body-suscripcion">
+			<div class="formulario-registro">
+				<form id="formRegistro">
+					<div class="form-group">
+						<label for="inputRUC">RUC o Cédula <span class="required">*</span></label>
+						<input type="text" id="inputRUC" name="ruc" placeholder="1234567890001" pattern="[0-9]{10,13}" maxlength="13" required />
+						<small>Se llenará automáticamente si cargó archivo NEXO</small>
+					</div>
+					<div class="form-group">
+						<label for="inputNombres">Nombres Completos o Razón Social <span class="required">*</span></label>
+						<input type="text" id="inputNombres" name="nombres" placeholder="Ej: Juan Pérez López o EMPRESA S.A." required />
+						<small>Se llenará automáticamente si ya estuvo registrado</small>
+					</div>
+					<div class="form-group">
+						<label for="inputEmail">Correo electrónico <span class="required">*</span></label>
+						<input type="email" id="inputEmail" name="email" placeholder="ejemplo@correo.com" required autocomplete="email" />
+						<small>Recibirá confirmación en este correo</small>
+					</div>
+					<div class="form-group">
+						<label for="inputTelefono">Teléfono celular <span class="required">*</span></label>
+						<input type="tel" id="inputTelefono" name="telefono" placeholder="0999999999" pattern="[0-9]{10}" maxlength="10" required />
+						<small>10 dígitos sin espacios ni guiones</small>
+					</div>
+					<div class="form-group">
+						<label for="inputDireccion">Dirección</label>
+						<textarea id="inputDireccion" name="direccion" rows="2" placeholder="Calle, número, ciudad... (opcional)"></textarea>
+					</div>
+					<div id="infoSaldo" class="info-saldo-box" hidden>
+						<div class="saldo-header">
+							<strong>Saldo a recuperar detectado</strong>
+							<p id="montoSaldo" class="monto-destacado">$0.00</p>
+						</div>
+						<p class="saldo-descripcion">Este monto fue calculado automáticamente de los documentos que cargó. Se incluirá en su solicitud de devolución de retenciones de IVA no compensadas.</p>
+						<div id="planSugerido" class="plan-sugerido">
+							<div class="plan-sugerido__fila">
+								<div>
+									<strong>📌 Plan sugerido:</strong> <span id="nombrePlanSugerido">REGISTRO</span>
+								</div>
+								<div>
+									<span id="valorLicencia"></span>
+								</div>
+							</div>
+							<p class="plan-sugerido__nota">Basado en el monto de su saldo detectado</p>
+						</div>
+					</div>
+					<div class="beneficios-registro">
+						<h4>✨ Beneficios de renovar o registrarse:</h4>
+						<ul>
+							<li>✅ Generación automática de la solicitud en PDF</li>
+							<li>✅ Validación de datos</li>
+							<li>✅ Descarga ilimitada por 30 días</li>
+							<li>✅ La posibilidad real de recuperar su dinero retenido</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="modal-footer-suscripcion">
+			<button type="button" id="btnConfirmarRegistro" class="btn-primary-modal">Confirmar renovación / registro</button>
+			<button type="button" id="btnCancelar" class="btn-secondary-modal">Cancelar</button>
+		</div>
+	</div>
+</div>
+<!-- Modal de Confirmación de Registro -->
+<div id="modalConfirmacion" class="modal-confirmacion" hidden role="dialog" aria-modal="true" aria-labelledby="tituloModalConfirmacion">
+	<div class="modal-content-confirmacion">
+		<div class="confirmacion-header">
+			<h2 id="tituloModalConfirmacion">✅ ¡Registro exitoso!</h2>
+		</div>
+		<div class="confirmacion-body">
+			<div id="contenidoConfirmacion"></div>
+		</div>
+		<div class="confirmacion-footer">
+			<button id="btnCerrarConfirmacion" class="btn-primary-confirmacion">Aceptar</button>
+		</div>
+	</div>
+</div>
+
+    <!-- Configuracion publica: solo endpoints publicos autorizados.
+         No contiene secretos. Debe cargarse ANTES de app.js. -->
+    <script src="config.publica.js?v=45.0"></script>
+    <script src="registroModulo/registroModulo.js?v=45.0"></script>
+    <script src="app.js?v=45.0"></script>
+    <script>
+    // ...existing code...
+    // Evitar selección y copia en #vista-previa
+    document.addEventListener('DOMContentLoaded', function() {
+        var vistaPrevia = document.getElementById('vista-previa');
+        if (vistaPrevia) {
+            vistaPrevia.addEventListener('copy', function(e) { e.preventDefault(); });
+            vistaPrevia.addEventListener('cut', function(e) { e.preventDefault(); });
+            vistaPrevia.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        }
+    });
+    </script>
+</body>
+</html>

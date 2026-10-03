@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 125"><rect width="760" height="125" fill="#0F172A"/><g transform="translate(12 10) scale(.9)"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#16A34A"/><stop offset="1" stop-color="#15803D"/></linearGradient></defs>
+<path d="M28 18H57C79 18 96 35 96 57S79 96 57 96H28Z" fill="none" stroke="url(#g)" stroke-width="14" stroke-linejoin="round"/>
+<circle cx="31" cy="34" r="6" fill="#16A34A"/><circle cx="31" cy="57" r="6" fill="#16A34A"/><circle cx="31" cy="80" r="6" fill="#16A34A"/>
+<path d="M37 34H57M37 57H68M37 80H57" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/></g>
+<text x="135" y="66" font-family="Inter,Arial,sans-serif" font-size="52" font-weight="700" fill="white">Data<tspan fill="#16A34A">Recupera</tspan></text>
+<text x="137" y="102" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="500" letter-spacing="2.5" fill="#CBD5E1">RECUPERACIÓN TRIBUTARIA</text></svg>
