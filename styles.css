@@ -216,22 +216,6 @@ button:disabled {
     cursor: not-allowed;
 }
 
-.btn-registrarse {
-    background-color: var(--gjv-acento);
-    color: var(--gjv-superficie);
-    border: none;
-    padding: var(--gjv-e-2) var(--gjv-e-4);
-    border-radius: var(--gjv-r-sm);
-    cursor: pointer;
-    margin-left: auto;
-    font-weight: 600;
-}
-
-.btn-registrarse:hover:not(:disabled) {
-    background-color: var(--gjv-acento-oscuro);
-    color: var(--gjv-superficie);
-}
-
 #registroBtn {
     padding: var(--gjv-e-1) var(--gjv-e-3);
     font-size: var(--gjv-t-12);

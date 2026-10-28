@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Certificación en PDF</title>
     <link rel="icon" type="image/svg+xml" href="marca/favicon.svg" />
-    <link rel="stylesheet" href="marca/base.css">
+    <link rel="stylesheet" href="marca/base.css?v=v65">
     <link rel="stylesheet" href="styles.css">
-    <link id="iva-registro-css" rel="stylesheet" href="registroModulo/registroModulo.css?v=45.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -29,7 +28,8 @@
     </header>
 
     <h1>GENERADOR DE CERTIFICACION</h1>
-        <div class="cards-container">
+    
+    <div class="cards-container">
     <div id="area-proceso">
         <h2>Procesar Archivos</h2>
 
@@ -149,7 +149,6 @@
                             <div id="fechaRegistro" class="fecha-registro"></div>
                             <div id="tipoPlan" class="tipo-plan" hidden></div>
                         </div>
-                        <button id="registroBtn" class="btn-registrarse" hidden>Registrarse</button>
                     </div>
 
                     <!-- Mensajes de estado. role=status hace que el lector de
@@ -261,97 +260,10 @@
         
     </script>
 
-<!-- Modal de Renovación/Registro de Clientes -->
-<div id="modalSuscripcion" class="modal-suscripcion" hidden role="dialog" aria-modal="true" aria-labelledby="tituloModalRegistro">
-	<div class="modal-content-suscripcion">
-		<span class="close-modal" id="closeModal" role="button" tabindex="0" aria-label="Cerrar">&times;</span>
-		<div class="modal-header-suscripcion">
-			<h2 id="tituloModalRegistro">🔄 Renovación / Registro para Recuperación de IVA</h2>
-			<p class="modal-subtitulo">Complete o verifique sus datos para generar su Solicitud (válido 30 días)</p>
-		</div>
-		<div class="modal-body-suscripcion">
-			<div class="formulario-registro">
-				<form id="formRegistro">
-					<div class="form-group">
-						<label for="inputRUC">RUC o Cédula <span class="required">*</span></label>
-						<input type="text" id="inputRUC" name="ruc" placeholder="1234567890001" pattern="[0-9]{10,13}" maxlength="13" required />
-						<small>Se llenará automáticamente si cargó archivo NEXO</small>
-					</div>
-					<div class="form-group">
-						<label for="inputNombres">Nombres Completos o Razón Social <span class="required">*</span></label>
-						<input type="text" id="inputNombres" name="nombres" placeholder="Ej: Juan Pérez López o EMPRESA S.A." required />
-						<small>Se llenará automáticamente si ya estuvo registrado</small>
-					</div>
-					<div class="form-group">
-						<label for="inputEmail">Correo electrónico <span class="required">*</span></label>
-						<input type="email" id="inputEmail" name="email" placeholder="ejemplo@correo.com" required autocomplete="email" />
-						<small>Recibirá confirmación en este correo</small>
-					</div>
-					<div class="form-group">
-						<label for="inputTelefono">Teléfono celular <span class="required">*</span></label>
-						<input type="tel" id="inputTelefono" name="telefono" placeholder="0999999999" pattern="[0-9]{10}" maxlength="10" required />
-						<small>10 dígitos sin espacios ni guiones</small>
-					</div>
-					<div class="form-group">
-						<label for="inputDireccion">Dirección</label>
-						<textarea id="inputDireccion" name="direccion" rows="2" placeholder="Calle, número, ciudad... (opcional)"></textarea>
-					</div>
-					<div id="infoSaldo" class="info-saldo-box" hidden>
-						<div class="saldo-header">
-							<strong>Saldo a recuperar detectado</strong>
-							<p id="montoSaldo" class="monto-destacado">$0.00</p>
-						</div>
-						<p class="saldo-descripcion">Este monto fue calculado automáticamente de los documentos que cargó. Se incluirá en su solicitud de devolución de retenciones de IVA no compensadas.</p>
-						<div id="planSugerido" class="plan-sugerido">
-							<div class="plan-sugerido__fila">
-								<div>
-									<strong>📌 Plan sugerido:</strong> <span id="nombrePlanSugerido">REGISTRO</span>
-								</div>
-								<div>
-									<span id="valorLicencia"></span>
-								</div>
-							</div>
-							<p class="plan-sugerido__nota">Basado en el monto de su saldo detectado</p>
-						</div>
-					</div>
-					<div class="beneficios-registro">
-						<h4>✨ Beneficios de renovar o registrarse:</h4>
-						<ul>
-							<li>✅ Generación automática de la solicitud en PDF</li>
-							<li>✅ Validación de datos</li>
-							<li>✅ Descarga ilimitada por 30 días</li>
-							<li>✅ La posibilidad real de recuperar su dinero retenido</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="modal-footer-suscripcion">
-			<button type="button" id="btnConfirmarRegistro" class="btn-primary-modal">Confirmar renovación / registro</button>
-			<button type="button" id="btnCancelar" class="btn-secondary-modal">Cancelar</button>
-		</div>
-	</div>
-</div>
-<!-- Modal de Confirmación de Registro -->
-<div id="modalConfirmacion" class="modal-confirmacion" hidden role="dialog" aria-modal="true" aria-labelledby="tituloModalConfirmacion">
-	<div class="modal-content-confirmacion">
-		<div class="confirmacion-header">
-			<h2 id="tituloModalConfirmacion">✅ ¡Registro exitoso!</h2>
-		</div>
-		<div class="confirmacion-body">
-			<div id="contenidoConfirmacion"></div>
-		</div>
-		<div class="confirmacion-footer">
-			<button id="btnCerrarConfirmacion" class="btn-primary-confirmacion">Aceptar</button>
-		</div>
-	</div>
-</div>
-
     <!-- Configuracion publica: solo endpoints publicos autorizados.
          No contiene secretos. Debe cargarse ANTES de app.js. -->
-    <script src="config.publica.js?v=45.0"></script>
-    <script src="registroModulo/registroModulo.js?v=45.0"></script>
-    <script src="app.js?v=45.0"></script>
+    <script src="config.publica.js?v=v65"></script>
+    <script src="app.js?v=v65"></script>
     <script>
     // ...existing code...
     // Evitar selección y copia en #vista-previa

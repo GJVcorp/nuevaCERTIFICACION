@@ -14,7 +14,7 @@
      Alternativa sin tocar el archivo, antes de que cargue app.js:
        window.IVA_CERT_CONFIG.endpointLicencia = "https://.../exec";
 
-   CONTRATO DEL ENDPOINT  (POST, Content-Type: text/plain;charset=utf-8)
+   CONTRATO DEL ENDPOINT: GET /cliente?ruc=...; exclusivamente consulta.
      Envia : { "ruc": "1790012345001" }
      Debe responder JSON:
        {

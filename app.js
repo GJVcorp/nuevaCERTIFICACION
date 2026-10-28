@@ -42,7 +42,7 @@ function alternarVisibilidad(el, visible) {
     if (visible) { mostrar(el); } else { ocultar(el); }
 }
 
-// Se exponen porque el módulo de registro también las necesita.
+// Utilidades compartidas por la interfaz de certificación.
 window.mostrar = mostrar;
 window.ocultar = ocultar;
 window.alternarVisibilidad = alternarVisibilidad;
@@ -633,6 +633,8 @@ function procesarDatosSolicitudIdentidad(textoOriginal, canton) {
     const mDir = tNorm.match(/Provincia:\s*([\s\S]*?)(?=\s*,?\s*comparezco\s+ante\s+su\s+autoridad|\s+\d{1,6}\.\d{2}\b|\s+La misma que est[aá] registrada|\s+ACREDITACI[oó]N|\s+www\.sri\.gob\.ec|\s+SOLICITUD|\s*$)/i);
     if (mDir && mDir[1]) {
         direccion = ("Provincia: " + mDir[1]).replace(/\s*\n\s*/g, " ").replace(/\s{2,}/g, " ").trim().replace(/[\s,]+$/, "");
+        // La cabecera de la declaración puede quedar entre el domicilio y el monto.
+        direccion = direccion.replace(/\s+RENTA\s+ANUAL\s+\d{8,}\b[\s\S]*$/i, '').trim();
     }
 
     // Fallback común para IVA/RTA: algunos PDF no conservan bien la cabecera
@@ -1351,61 +1353,6 @@ document.addEventListener("DOMContentLoaded", function () {
     window.actualizarBloqueCertificacion = actualizarBloqueCertificacion;
 }); // <-- cierre correcto del addEventListener
 // =====================
-// Integración del botón REGISTRARSE con registroModulo
-// =====================
-document.addEventListener("DOMContentLoaded", function () {
-    // Inicializa el contexto global si no existe
-    window.recuperaIVA_ctx = window.recuperaIVA_ctx || {
-        ruc: null,
-        razonSocial: null,
-        saldo: null
-    };
-
-    const registroBtn = document.getElementById("registroBtn");
-    if (registroBtn) {
-        registroBtn.addEventListener("click", function () {
-            const ctx = window.recuperaIVA_ctx || {};
-
-
-
-
-                                                // Las distintas estructuras PDF pueden publicar el monto
-                                                // en cualquiera de estas fuentes equivalentes.
-                                                const fuentesMonto = [
-                                                    window.MONTO_SOLICITADO,
-                                                    window.SALDO_CREDITO,
-                                                    ctx.saldo
-                                                ];
-                                                const montoSolicitud = fuentesMonto
-                                                    .map(valor => Number(valor))
-                                                    .find(valor => Number.isFinite(valor) && valor > 0) || 0;
-                                                ctx.saldo = montoSolicitud;
-
-                                                if (!ctx.saldo) {
-                                                    window.aviso.error("No se pudo leer el monto de la solicitud en el PDF. Vuelva a cargar el archivo o compruebe que es la solicitud de devolución completa.");
-                                                    return;
-                                                }
-
-                                                console.log("[REGISTRO] saldo enviado:", ctx.saldo, {
-                                                        montoSolicitud: window.MONTO_SOLICITADO
-                                                });
-
-            if (window.RegistroModulo && window.RegistroModulo.mostrarModalRegistro) {
-                Promise.resolve(window.RegistroModulo.mostrarModalRegistro({
-                    ruc: ctx.ruc || '',
-                    razonSocial: ctx.razonSocial || '',
-                    saldo: ctx.saldo || '',
-                    direccion: ctx.direccion || ''
-                })).catch(error => {
-                    console.error("Error al abrir el módulo de registro:", error);
-                    window.aviso.error("No se pudo abrir el formulario de registro. Recargue la página; si persiste, contacte a soporte.");
-                });
-            } else {
-                window.aviso.error("El formulario de registro no está disponible. Recargue la página; si persiste, contacte a soporte.");
-            }
-        });
-    }
-});
         // Rol y otros helpers solo tras cargar el DOM
         document.addEventListener("DOMContentLoaded", function() {
             if (typeof window.setText === "function") {
@@ -1861,6 +1808,7 @@ async function consultarLicenciaRUC(ruc) {
         // El Worker expone GET /cliente?ruc=... y responde con CORS.
         respuesta = await fetch(cfg.endpoint + "?ruc=" + encodeURIComponent(ruc), {
             method: "GET",
+            cache: "no-store",
             redirect: "follow",
             signal: controlador ? controlador.signal : undefined
         });
@@ -1898,39 +1846,44 @@ async function consultarLicenciaRUC(ruc) {
 }
 
 /* De una lista de registros de un mismo RUC elige el de caducidad mas
-   reciente; si ninguno tiene fecha valida, el primero. */
+   reciente; en empate, la última fila. Sin fecha no autoriza emisión. */
 function elegirMejorRegistro(registros, parseFecha) {
     let mejor = null;
     let mejorFecha = null;
     for (let i = 0; i < registros.length; i++) {
         const f = parseFecha(registros[i].caduca);
-        if (!f) { if (!mejor) mejor = registros[i]; continue; }
-        if (!mejor || !mejorFecha || f > mejorFecha) { mejor = registros[i]; mejorFecha = f; }
+        if (!f) { if (String(registros[i].caduca || "").trim()) throw new Error("Caducidad de licencia inválida."); continue; }
+        if (!mejor || !mejorFecha || f >= mejorFecha) { mejor = registros[i]; mejorFecha = f; }
     }
     return mejor;
 }
 
+let consultaLicenciaRevision = 0;
 async function verificarRUC() {
+    const revisionConsulta = ++consultaLicenciaRevision;
     let rucElement = document.getElementById("rucRUC");
     if (!rucElement) {
         console.error("❌ Error: Elemento 'rucRUC' no encontrado en el DOM.");
         return;
     }
     let rucIngresado = rucElement.textContent.trim();
+    const servicioConsultado = window.TIPO_TRAMITE;
 
     let resultado = document.getElementById("resultado");
     let fechaRegistro = document.getElementById("fechaRegistro");
     let tipoPlan = document.getElementById("tipoPlan");
-    let registroBtn = document.getElementById("registroBtn");
     const downloadReportButton = document.getElementById("downloadReportButton"); // PDF
     const downloadReportButton2 = document.getElementById("downloadReportButton2"); // TABLA
 
     const normalizarRucCliente = (valor) => String(valor || "").replace(/\D/g, "").padStart(13, "0").slice(-13);
     const parseFechaCaducaCliente = (valor) => {
-        const match = String(valor || "").trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-        if (!match) return null;
-        const fecha = new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]), 23, 59, 59);
-        return Number.isNaN(fecha.getTime()) ? null : fecha;
+        const texto = String(valor || '').trim();
+        const local = texto.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        const iso = texto.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!local && !iso) return null;
+        const y = Number(local ? local[3] : iso[1]), m = Number(local ? local[2] : iso[2]), d = Number(local ? local[1] : iso[3]);
+        const fecha = new Date(y, m - 1, d, 23, 59, 59, 999);
+        return fecha.getFullYear() === y && fecha.getMonth() === m - 1 && fecha.getDate() === d ? fecha : null;
     };
 
     // Cada consulta reinicia la autorización hasta comprobar RUC y fecha.
@@ -1951,7 +1904,6 @@ async function verificarRUC() {
         fechaRegistro.textContent = "";
         tipoPlan.textContent = "";
         ocultar(tipoPlan);
-        if (registroBtn) ocultar(registroBtn);
         return;
     }
 
@@ -1964,7 +1916,9 @@ async function verificarRUC() {
 
                 // Consulta al backend de licencias. El backend resuelve el RUC y
                 // devuelve solo el registro mas reciente de ese contribuyente.
+                if (!/^\d{13}$/.test(rucIngresado.replace(/\D/g, '')) || !['recuperaIVA', 'recuperaRTA'].includes(servicioConsultado)) throw new Error('Falta identificar el RUC y el servicio del trámite.');
                 const datos = await consultarLicenciaRUC(rucNormalizado);
+                if (revisionConsulta !== consultaLicenciaRevision || rucElement.textContent.trim() !== rucIngresado || window.TIPO_TRAMITE !== servicioConsultado) return;
 
                 if (datos && datos.ok === true) {
                     // Un mismo RUC puede tener varios registros (renovaciones).
@@ -1972,7 +1926,11 @@ async function verificarRUC() {
                     const registros = (Array.isArray(datos.filas) && datos.filas.length)
                         ? datos.filas
                         : [datos];
-                    const mejor = elegirMejorRegistro(registros, parseFechaCaducaCliente) || datos;
+                    if (registros.some(f => !f || String(f.ruc || '').trim() !== rucNormalizado || !f.tipoServicio)) throw new Error('Historial de licencias incompleto o de otro RUC.');
+                    const delServicio = registros.filter(f => f.tipoServicio === servicioConsultado);
+                    if (!delServicio.length) throw new Error('No se encontró una licencia para ' + servicioConsultado + '. Consulte el área CLIENTES.');
+                    const mejor = elegirMejorRegistro(delServicio, parseFechaCaducaCliente);
+                    if (!mejor) throw new Error('La licencia de este servicio está pendiente de activación. Consulte el área CLIENTES.');
 
                     const datoTipoPlan = String(mejor.plan || "").trim();
                     const tipoServicio = String(mejor.tipoServicio || "").trim();
@@ -1991,7 +1949,6 @@ async function verificarRUC() {
                             window.clienteAutorizadoPorFecha = true;
                             resultado.textContent = "✅ RUC válido y vigente en la base de datos";
                             resultado.style.color = "green";
-                            if (registroBtn) ocultar(registroBtn);
                             let textoPlan = `Plan: ${datoTipoPlan}`;
                             if (tipoServicio) textoPlan += ` | Servicio: ${tipoServicio}`;
                             tipoPlan.textContent = textoPlan;
@@ -2002,7 +1959,6 @@ async function verificarRUC() {
                             window.clienteAutorizadoPorFecha = true;
                             resultado.textContent = `⚠️ Licencia caducada (${fechaCaducidad}), pero dentro del periodo de gracia de ${cfg.mesesGracia} meses. Se permite la emisión.`;
                             resultado.style.color = "#d97706";
-                            if (registroBtn) mostrar(registroBtn);
                             let textoPlan = `Plan: ${datoTipoPlan}`;
                             if (tipoServicio) textoPlan += ` | Servicio: ${tipoServicio}`;
                             tipoPlan.textContent = textoPlan;
@@ -2010,29 +1966,27 @@ async function verificarRUC() {
                             evaluarPermisosDescarga();
                         } else {
                             // Caducado fuera del periodo de gracia -> bloqueado
-                            resultado.textContent = `❌ Licencia caducó el ${fechaCaducidad} (hace más de ${cfg.mesesGracia} meses). Debe renovar para descargar.`;
+                            resultado.textContent = `❌ Licencia caducó el ${fechaCaducidad} (hace más de ${cfg.mesesGracia} meses). Consulte la renovación en el área CLIENTES para descargar.`;
                             resultado.style.color = "red";
-                            if (registroBtn) mostrar(registroBtn);
                             ocultar(tipoPlan);
                         }
                     } else {
-                        resultado.textContent = "❌ Registro de RUC sin fecha de caducidad válida. Debe renovar.";
+                        resultado.textContent = "❌ Registro de RUC sin fecha de caducidad válida. Consulte el área CLIENTES.";
                         resultado.style.color = "red";
                         fechaRegistro.textContent = "📅 Válido hasta: No disponible";
                         ocultar(tipoPlan);
-                        if (registroBtn) mostrar(registroBtn);
                     }
                 } else {
                     // El backend no encontró el RUC: nunca tuvo licencia
-                    resultado.textContent = "❌ RUC no encontrado. Debe registrarse previamente para habilitar descargas.";
+                    resultado.textContent = "❌ RUC no encontrado. Consulte el área CLIENTES para habilitar descargas.";
                     resultado.style.color = "red";
                     fechaRegistro.textContent = "";
                     tipoPlan.textContent = "";
                     ocultar(tipoPlan);
-                    if (registroBtn) mostrar(registroBtn);
                 }
 
     } catch (error) {
+        if (revisionConsulta !== consultaLicenciaRevision || rucElement.textContent.trim() !== rucIngresado || window.TIPO_TRAMITE !== servicioConsultado) return;
         console.error("❌ Error al consultar el servicio de licencias:", error);
         // El mensaje dice qué falló y qué hacer (Estandar §7.6), sin afirmar
         // que el RUC no existe: un fallo del servicio no es un RUC inválido.
@@ -2040,15 +1994,11 @@ async function verificarRUC() {
         resultado.style.color = "red";
         fechaRegistro.textContent = "";
         ocultar(tipoPlan);
-        if (registroBtn) mostrar(registroBtn);
     }
 }
 window.verificarRUC = verificarRUC;
 
-function registrarRUC() {
-    const FORM_URL = "https://forms.gle/tKKE3jmK6oGpZsD8A";
-    window.open(FORM_URL, '_blank');
-}
+
 
 function imprimirVistaPreviaPDF() {
     // Estado ocupado: generar el PDF con html2canvas tarda más de 300 ms y el
@@ -2196,7 +2146,7 @@ function imprimirVistaPreviaPDF() {
     } finally {
         // El botón siempre vuelve a su estado, haya salido bien o mal.
         if (botonPdf) {
-            botonPdf.disabled = false;
+            botonPdf.disabled = window.clienteAutorizadoPorFecha !== true;
             botonPdf.textContent = textoBotonPdf;
             botonPdf.classList.remove("is-busy");
         }
@@ -2280,14 +2230,14 @@ function descargarTabla() {
 
     // Agregar la hoja al libro y descargar el archivo Excel
     XLSX.utils.book_append_sheet(wb, ws, "Datos");
-    XLSX.writeFile(wb, "GJVcorp_tablaMD5_recIVA.xlsx");
+    XLSX.writeFile(wb, window.TIPO_TRAMITE === 'recuperaRTA' ? 'GJVcorp_tablaMD5_recRTA.xlsx' : 'GJVcorp_tablaMD5_recIVA.xlsx');
 
     } catch (err) {
         console.error("No se pudo generar la tabla:", err);
         window.aviso.error("No se pudo generar la tabla: " + (err && err.message ? err.message : "error desconocido") + ". Vuelva a cargar la solicitud e inténtelo de nuevo.");
     } finally {
         if (botonTabla) {
-            botonTabla.disabled = false;
+            botonTabla.disabled = window.clienteAutorizadoPorFecha !== true;
             botonTabla.textContent = textoBotonTabla;
             botonTabla.classList.remove("is-busy");
         }
@@ -2360,8 +2310,6 @@ function cleanData() {
             ocultar(mensaje);
         }
     });
-    const registroBtn = document.getElementById("registroBtn");
-    if (registroBtn) ocultar(registroBtn);
 
     // 🔹 Limpiar y OCULTAR la tabla `tabla-previa`
     const tablaPrevia = document.getElementById("tabla-previa");
