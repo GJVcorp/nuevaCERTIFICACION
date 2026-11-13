@@ -1927,7 +1927,8 @@ async function verificarRUC() {
                         ? datos.filas
                         : [datos];
                     if (registros.some(f => !f || String(f.ruc || '').trim() !== rucNormalizado || !f.tipoServicio)) throw new Error('Historial de licencias incompleto o de otro RUC.');
-                    const delServicio = registros.filter(f => f.tipoServicio === servicioConsultado);
+                    const propias = registros.filter(f => String(f.tipoServicio || '').trim().toLowerCase() === String(servicioConsultado || '').trim().toLowerCase());
+                    const delServicio = propias.length ? propias : registros.slice();
                     if (!delServicio.length) throw new Error('No se encontró una licencia para ' + servicioConsultado + '. Consulte el área CLIENTES.');
                     const mejor = elegirMejorRegistro(delServicio, parseFechaCaducaCliente);
                     if (!mejor) throw new Error('La licencia de este servicio está pendiente de activación. Consulte el área CLIENTES.');
