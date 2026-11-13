@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de CertificaciÃ³n en PDF</title>
+    <title>Generador de Certificación en PDF</title>
     <link rel="icon" type="image/svg+xml" href="marca/favicon.svg" />
     <link rel="stylesheet" href="marca/base.css?v=v65">
     <link rel="stylesheet" href="styles.css">
@@ -36,31 +36,31 @@
         <div class="columns-container">
             <div class="column1">
 
-                <!-- 1. ÃREA PRINCIPAL: documento del trÃ¡mite previo + comunicaciÃ³n opcional -->
+                <!-- 1. ÁREA PRINCIPAL: documento del trámite previo + comunicación opcional -->
                 <div class="card-upload-principal">
                     <div class="principal-header-row">
                         <span class="badge-step">1</span>
                         <div class="principal-titles">
-                            <h3>CertificaciÃ³n como paso adicional del trÃ¡mite</h3>
+                            <h3>Certificación como paso adicional del trámite</h3>
                         </div>
                     </div>
 
                     <div class="dos-uploads-grid">
-                        <!-- Upload 1: Solicitud de DevoluciÃ³n PDF -->
+                        <!-- Upload 1: Solicitud de Devolución PDF -->
                         <div class="upload-subbox">
-                            <h4 class="subbox-title">ðŸ“„ Solicitud de DevoluciÃ³n (PDF)</h4>
+                            <h4 class="subbox-title">📄 Solicitud de Devolución (PDF)</h4>
                             <p class="subbox-hint">
-                                â„¹ï¸ Suba el PDF generado en el trÃ¡mite previo. Puede provenir de recuperaIVA o recuperaRTA; la certificaciÃ³n identifica el origen automÃ¡ticamente.
+                                ℹ️ Suba el PDF generado en el trámite previo. Puede provenir de recuperaIVA o recuperaRTA; la certificación identifica el origen automáticamente.
                             </p>
                             <div class="subbox-action">
-                                <label class="etiqueta-archivo" for="inputSolicitudPDF">Solicitud de devoluciÃ³n</label>
+                                <label class="etiqueta-archivo" for="inputSolicitudPDF">Solicitud de devolución</label>
                                 <input type="file" id="inputSolicitudPDF" accept="application/pdf,.pdf" onchange="cargarSolicitudPDF(event);" class="input-archivo">
                                 <span id="statusSolicitudPDF" class="status-archivo-principal">Sin cargar</span>
                             </div>
                             <div class="column2" id="datos-txt" hidden>
                                 <div id="datos-completos">
                                     <div class="datos-titulo">
-                                        <span>ðŸ“Š Datos extraÃ­dos del trÃ¡mite</span>
+                                        <span>📊 Datos extraídos del trámite</span>
                                     </div>
                                     <div class="datos-linea">
                                         <div><strong>CONTRIBUYENTE:</strong></div>
@@ -69,12 +69,12 @@
                                     </div>
                                     <p id="mensaje-error-ruc" class="campo-error" hidden></p>
                                     <div class="datos-tramite">
-                                        <strong>TRÃMITE:</strong> <span id="tipo-tramite-detectado">Por identificar</span>
+                                        <strong>TRÁMITE:</strong> <span id="tipo-tramite-detectado">Por identificar</span>
                                     </div>
 
                                     <div id="datos-declaracion" class="datos-declaracion" hidden>
-                                        <div><strong>PERÃODO:</strong> desde <span id="periodo-desde"></span> hasta <span id="periodo-hasta"></span></div>
-                                        <div><strong>MONTO DE RECUPERACIÃ“N:</strong> USD <span id="prev-dec-saldo-credito"></span></div>
+                                        <div><strong>PERÍODO:</strong> desde <span id="periodo-desde"></span> hasta <span id="periodo-hasta"></span></div>
+                                        <div><strong>MONTO DE RECUPERACIÓN:</strong> USD <span id="prev-dec-saldo-credito"></span></div>
                                         <span id="prev-dec-periodo-fiscal" hidden></span>
                                         <span id="prev-dec-numero-serial" hidden></span>
                                     </div>
@@ -86,28 +86,28 @@
                             </div>
                         </div>
 
-                        <!-- Upload 2: ComunicaciÃ³n SRI PDF (Opcional) -->
+                        <!-- Upload 2: Comunicación SRI PDF (Opcional) -->
                         <div class="upload-subbox upload-subbox--sri">
-                            <h4 class="subbox-title subbox-title--sri">ðŸ“© ComunicaciÃ³n SRI a Responder (PDF) <small class="texto-opcional">(opcional)</small></h4>
+                            <h4 class="subbox-title subbox-title--sri">📩 Comunicación SRI a Responder (PDF) <small class="texto-opcional">(opcional)</small></h4>
                             <p class="subbox-hint subbox-hint--sri">
-                                â„¹ï¸ Suba el PDF de la ComunicaciÃ³n del SRI Ãºnicamente si este trÃ¡mite responde a una notificaciÃ³n o requerimiento de la entidad.
+                                ℹ️ Suba el PDF de la Comunicación del SRI únicamente si este trámite responde a una notificación o requerimiento de la entidad.
                             </p>
                             <div class="subbox-action">
-                                <label class="etiqueta-archivo" for="inputComunicacionPDF">ComunicaciÃ³n del SRI</label>
+                                <label class="etiqueta-archivo" for="inputComunicacionPDF">Comunicación del SRI</label>
                                 <input type="file" id="inputComunicacionPDF" accept="application/pdf,.pdf" onchange="cargarComunicacionPDF(event);" class="input-archivo">
                                 <span id="statusComunicacionPDF" class="status-archivo-principal">Opcional - Sin cargar</span>
                             </div>
                             <p id="errorComunicacionSRI" class="campo-error" hidden></p>
                             <div id="datosComunicacionSRI" class="datos-sri" hidden>
-                                <div><strong>NÃšMERO DE TRÃMITE:</strong> <span id="comunicacion-numero-tramite"></span></div>
-                                <div><strong>NÃšMERO DE <span id="comunicacion-tipo-documento">OFICIO</span>:</strong> <span id="comunicacion-numero-oficio"></span></div>
+                                <div><strong>NÚMERO DE TRÁMITE:</strong> <span id="comunicacion-numero-tramite"></span></div>
+                                <div><strong>NÚMERO DE <span id="comunicacion-tipo-documento">OFICIO</span>:</strong> <span id="comunicacion-numero-oficio"></span></div>
                                 <span id="comunicacion-ruc" hidden></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2. ÃREA SECUNDARIA: Carga de Documentos Adicionales de Soporte (Hasta 10 max) -->
+                <!-- 2. ÁREA SECUNDARIA: Carga de Documentos Adicionales de Soporte (Hasta 10 max) -->
                 <div class="card-upload-secundaria">
                     <div class="secundaria-header-row">
                         <span class="badge-step badge-sec">2</span>
@@ -115,9 +115,9 @@
                     </div>
 
                     <div class="upload-dropzone" id="dropzone" role="button" tabindex="0" aria-label="Zona para arrastrar o seleccionar documentos de soporte" onclick="abrirSelectorSoportes(event);" onkeydown="if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); abrirSelectorSoportes(event); }" ondragover="event.preventDefault(); this.classList.add('dragover');" ondragleave="this.classList.remove('dragover');" ondrop="event.preventDefault(); this.classList.remove('dragover'); manejarArchivosDrop(event);">
-                        <div class="dropzone-icon" aria-hidden="true">ðŸ“</div>
-                        <p class="dropzone-title">Seleccione o arrastre archivos adicionales aquÃ­</p>
-                        <p class="dropzone-subtitle">Formatos aceptados: .pdf, .xls, .xlsx (mÃ¡ximo 10 documentos en total)</p>
+                        <div class="dropzone-icon" aria-hidden="true">📁</div>
+                        <p class="dropzone-title">Seleccione o arrastre archivos adicionales aquí</p>
+                        <p class="dropzone-subtitle">Formatos aceptados: .pdf, .xls, .xlsx (máximo 10 documentos en total)</p>
                         <div class="dropzone-acciones">
                             <label class="etiqueta-archivo" for="multiFileInput">Documentos de soporte</label>
                             <input type="file" id="multiFileInput" accept="application/pdf,.pdf,.xls,.xlsx" multiple onclick="event.stopPropagation();" onchange="manejarArchivosSeleccionados(event);" class="input-archivo input-archivo--acento">
@@ -130,8 +130,8 @@
                     <div id="contenedorListaDocumentos" hidden>
                         <h3 class="lista-titulo">Lista de documentos incluidos:</h3>
                         <div id="listaDocumentosUI" class="documentos-lista-container">
-                            <!-- H4: estado vacÃ­o con texto Ãºtil (Â§7.5) -->
-                            <p class="lista-vacia">TodavÃ­a no ha aÃ±adido documentos de soporte. Arrastre archivos a la zona superior o use el botÃ³n Â«Documentos de soporteÂ».</p>
+                            <!-- H4: estado vacío con texto útil (§7.5) -->
+                            <p class="lista-vacia">Todavía no ha añadido documentos de soporte. Arrastre archivos a la zona superior o use el botón «Documentos de soporte».</p>
                         </div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
         </div>
     </div>
     <div id="area-clientes">
-                <h2>Ãrea de Clientes</h2>
+                <h2>Área de Clientes</h2>
 
                 <div class="info-box">
                     <div class="info-header">
@@ -152,7 +152,7 @@
                     </div>
 
                     <!-- Mensajes de estado. role=status hace que el lector de
-                         pantalla anuncie el cambio sin robar el foco (Â§7.7). -->
+                         pantalla anuncie el cambio sin robar el foco (§7.7). -->
                     <div id="resultado" class="message" role="status" aria-live="polite"></div>
 
                 </div>
@@ -166,26 +166,26 @@
                 <div id="vista-previa" hidden oncontextmenu="return false;">
                     <div class="vista-previa-espacio"></div>
 
-                    <h2 class="titulo-carta">Carta de certificaciÃ³n y responsabilidad de la informaciÃ³n para el ingreso de documentaciÃ³n digital</h2>
-                    <!-- Igual que el pÃ¡rrafo: sin saltos ni indentaciÃ³n dentro. -->
-                    <p id="anexo-comunicacion-sri" class="anexo-comunicacion-sri" hidden><strong>ANEXO:</strong> <span class="anexo-datos-sri"><span>NÃšMERO DE TRÃMITE:</span><span id="anexo-numero-tramite"></span><span>NÃšMERO DE <span id="anexo-tipo-documento">OFICIO</span>:</span><span id="anexo-numero-oficio"></span></span></p>
+                    <h2 class="titulo-carta">Carta de certificación y responsabilidad de la información para el ingreso de documentación digital</h2>
+                    <!-- Igual que el párrafo: sin saltos ni indentación dentro. -->
+                    <p id="anexo-comunicacion-sri" class="anexo-comunicacion-sri" hidden><strong>ANEXO:</strong> <span class="anexo-datos-sri"><span>NÚMERO DE TRÁMITE:</span><span id="anexo-numero-tramite"></span><span>NÚMERO DE <span id="anexo-tipo-documento">OFICIO</span>:</span><span id="anexo-numero-oficio"></span></span></p>
 
 
-                    <p>SeÃ±ores</p>
+                    <p>Señores</p>
                     <p>SERVICIO DE RENTAS INTERNAS</p>
 
-                    <p>Lugar y fecha de presentaciÃ³n: <span id="prev-canton"></span>, <span id="fecha-actual"></span></p>
+                    <p>Lugar y fecha de presentación: <span id="prev-canton"></span>, <span id="fecha-actual"></span></p>
 
                     <div class="vista-previa-espacio-corto"></div>
 
-                    <!-- El pÃ¡rrafo va en UNA sola lÃ­nea, sin saltos ni indentaciÃ³n.
+                    <!-- El párrafo va en UNA sola línea, sin saltos ni indentación.
                          Los espacios y saltos del propio marcado se convierten en
                          nodos de texto, y al exportar a PDF el reconstruir del texto
-                         los pierde: las palabras salen pegadas. Ya pasÃ³. -->
-                    <p id="parrafo-certificacion">De conformidad con lo establecido en la resoluciÃ³n NAC-DGERCGC16-00000152, por medio de la presente carta, Yo, <span id="prev-nombre"></span><span id="segmento-cedula-cert">, con cÃ©dula de ciudadanÃ­a o identidad No. <span id="prev-cedula"></span></span><span id="cert-rol"></span> <span id="nombreRUC"></span><span id="segmento-ruc-cert">RUC No. <span id="prev-ruc"></span></span>, con domicilio tributario en <span id="prev-direccion"></span></p>
-                    <p>Entrego informaciÃ³n digital de soporte para revisiÃ³n del Servicio de Rentas Internas. Esta entrega la realizo dentro del trÃ¡mite: <strong id="nombre-tramite-legal">SOLICITUD PARA LA DEVOLUCIÃ“N DE RETENCIONES DE IVA NO COMPENSADAS</strong></p>
-                    <p>La informaciÃ³n adjunta, presentada ante la AdministraciÃ³n Tributaria, es fiel copia de los documentos o archivos originales que reposan en mis archivos, la misma que se lista a continuaciÃ³n: </p>
-                    <p>InformaciÃ³n digital ingresada: Cantidad de documentos digitales ingresados: <span id="cantidad-docs-digitales"></span></p>
+                         los pierde: las palabras salen pegadas. Ya pasó. -->
+                    <p id="parrafo-certificacion">De conformidad con lo establecido en la resolución NAC-DGERCGC16-00000152, por medio de la presente carta, Yo, <span id="prev-nombre"></span><span id="segmento-cedula-cert">, con cédula de ciudadanía o identidad No. <span id="prev-cedula"></span></span><span id="cert-rol"></span> <span id="nombreRUC"></span><span id="segmento-ruc-cert">RUC No. <span id="prev-ruc"></span></span>, con domicilio tributario en <span id="prev-direccion"></span></p>
+                    <p>Entrego información digital de soporte para revisión del Servicio de Rentas Internas. Esta entrega la realizo dentro del trámite: <strong id="nombre-tramite-legal">SOLICITUD PARA LA DEVOLUCIÓN DE RETENCIONES DE IVA NO COMPENSADAS</strong></p>
+                    <p>La información adjunta, presentada ante la Administración Tributaria, es fiel copia de los documentos o archivos originales que reposan en mis archivos, la misma que se lista a continuación: </p>
+                    <p>Información digital ingresada: Cantidad de documentos digitales ingresados: <span id="cantidad-docs-digitales"></span></p>
 
                     <div id="tabla-previa" class="tabla-envoltura" hidden></div>
 
@@ -195,7 +195,7 @@
                     <div id="firma-certificacion">
                         <p class="firma-linea">------------------------------</p>
 
-                        <!-- SOCIEDAD: 4 lÃ­neas -->
+                        <!-- SOCIEDAD: 4 líneas -->
                         <p id="linea-rep-nombre-doc" hidden>
                             <span id="prev-rep-nombre-doc"></span>
                         </p>
@@ -212,7 +212,7 @@
                             RUC No. <span id="prev-ruc-doc-soc"></span>
                         </p>
 
-                        <!-- PERSONA NATURAL: 2 lÃ­neas -->
+                        <!-- PERSONA NATURAL: 2 líneas -->
                         <p id="linea-firma-nombre-doc" hidden>
                             <span id="prev-nombre-doc"></span>
                         </p>
@@ -263,10 +263,10 @@
     <!-- Configuracion publica: solo endpoints publicos autorizados.
          No contiene secretos. Debe cargarse ANTES de app.js. -->
     <script src="config.publica.js?v=v65"></script>
-    <script src="app.js?v=v66"></script>
+    <script src="app.js?v=v67"></script>
     <script>
     // ...existing code...
-    // Evitar selecciÃ³n y copia en #vista-previa
+    // Evitar selección y copia en #vista-previa
     document.addEventListener('DOMContentLoaded', function() {
         var vistaPrevia = document.getElementById('vista-previa');
         if (vistaPrevia) {
@@ -278,6 +278,3 @@
     </script>
 </body>
 </html>
-
-
-
